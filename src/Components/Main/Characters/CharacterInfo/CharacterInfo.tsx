@@ -41,11 +41,26 @@ const useStyles = makeStyles({
     paper: {
         width: 300,
     },
-    image: {},
+    row: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        borderBottom: '1px #ccc solid',
+        paddingLeft: 10,
+        '&:nth-of-type(odd)': {
+            backgroundColor: '#ccc',
+        },
+    },
+    episode: {
+        '&:nth-of-type(odd)': {
+            backgroundColor: '#ccc',
+        },
+    }
+
 });
 
 function ListItemLink(props: any) {
-    const { icon, primary, to } = props;
+    const classes = useStyles()
+    const {icon, primary, to} = props;
     const renderLink = React.useMemo(
         () =>
             React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
@@ -54,26 +69,16 @@ function ListItemLink(props: any) {
         [to],
     );
     return (
-        <li>
+        <li className={classes.episode}>
             <ListItem button component={renderLink}>
                 {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-                <Typography color='primary' variant='h6'>
-                    <ListItemText primary={primary} />
+                <Typography color='primary' variant='subtitle1'>
+                    <ListItemText primary={primary}/>
                 </Typography>
             </ListItem>
         </li>
     );
 }
-
-const StyledTableRow = withStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            '&:nth-of-type(odd)': {
-                backgroundColor: theme.palette.action.hover,
-            },
-        },
-    }),
-)(TableRow);
 
 type PropsType = {
     currentCharacter: CharacterType
@@ -86,12 +91,19 @@ type PropsType = {
     episodesOfCurrentCharacter: Array<EpisodeType>
 }
 
-const TableRowCustom = (ceilLeftContent: string, ceilRightContent: string) => {
+type PropTypes = {
+    leftContent: string
+    rightContent: string
+}
+
+const RowCustom: React.FC<PropTypes> = (props: PropTypes) => {
+    const classes = useStyles()
+    const {leftContent, rightContent} = props
     return (
-        <TableRow>
-            <TableCell>{ceilLeftContent}</TableCell>
-            <TableCell>{ceilRightContent}</TableCell>
-        </TableRow>
+        <div className={classes.row}>
+            <Typography variant='subtitle1'>{leftContent}</Typography>
+            <Typography variant='h6' color='primary'>{rightContent}</Typography>
+        </div>
     )
 };
 
@@ -175,6 +187,7 @@ const CharacterInfo: React.FC<PropsType> = (props) => {
                     </Button>
                 </Grid>
 
+
                 {isLoading ? <CircularProgress size={100} color={'secondary'}/> :
                     <div>
                         <Card className={classes.card}>
@@ -182,24 +195,25 @@ const CharacterInfo: React.FC<PropsType> = (props) => {
                                 className={classes.media}
                                 image={currentCharacter.image}/>
                         </Card>
-                        <TableContainer component={Paper}>
-                            <Table>
-                                <TableBody>
-                                    {TableRowCustom('Name', currentCharacter.name)}
-                                    {TableRowCustom('Gender', currentCharacter.gender)}
-                                    {TableRowCustom('Status', currentCharacter.status)}
-                                    {TableRowCustom('Species', currentCharacter.species)}
-                                    {currentCharacter.type && TableRowCustom('Subspecies', currentCharacter.type)}
-                                    {TableRowCustom('Origin location', currentCharacter.origin.name)}
-                                    {TableRowCustom('Last known location endpoint', currentCharacter.location.name)}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                        <RowCustom leftContent='Name:' rightContent={currentCharacter.name}/>
+                        <RowCustom leftContent='Gender:' rightContent={currentCharacter.gender}/>
+                        <RowCustom leftContent='Status:' rightContent={currentCharacter.status}/>
+                        <RowCustom leftContent='Species:' rightContent={currentCharacter.species}/>
+                        {currentCharacter.type &&
+                        <RowCustom leftContent='Subspecies:' rightContent={currentCharacter.type}/>}
+                        <RowCustom leftContent='Origin location:' rightContent={currentCharacter.origin.name}/>
+                        <RowCustom leftContent='Last known location endpoint:'
+                                   rightContent={currentCharacter.location.name}/>
+
+                        <Typography variant='h6' color='primary'>
+                            List of episodes in which this character appeared:
+                        </Typography>
                         <List>
                             {episodesOfCurrentCharacter.map(episode => <ListItemLink
+                                key={episode.id}
                                 to={`/episodes/${episode.id}`}
                                 primary={`${episode.episode} - ${episode.name}`}>
-                            </ListItemLink> )}
+                            </ListItemLink>)}
                         </List>
                     </div>
 

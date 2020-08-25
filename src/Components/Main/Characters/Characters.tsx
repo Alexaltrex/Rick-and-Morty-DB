@@ -2,13 +2,12 @@ import React, {useEffect, useState} from "react";
 import {CharacterType, SearchingParamsType} from "../../../Types/Types";
 import Character from "./Character/Character";
 import Paginator from "../../Common/Paginator/Paginator";
-import {Badge, CircularProgress, Collapse, Typography} from "@material-ui/core";
+import {Badge, CircularProgress, Collapse} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import SearchCharactersContainer from "./SearchCharacters/SearchCharactersContainer";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import SearchIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import {makeStyles} from "@material-ui/core/styles";
 import PeopleIcon from '@material-ui/icons/People';
 
@@ -89,6 +88,7 @@ const Characters: React.FC<PropTypes> = (props: PropTypes) => {
                 {panelIsOpen ? 'Close search' : 'Open search'}
             </Button>
             <Button onClick={onShowAllClick}
+                    disabled={!showCharactersFromSearch}
                     className={classes.button}
                     variant='contained'>
                 Show all
