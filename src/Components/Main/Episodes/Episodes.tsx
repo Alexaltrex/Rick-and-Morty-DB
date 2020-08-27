@@ -1,18 +1,23 @@
 import React, {useEffect, useState} from "react";
-import {EpisodeType} from "../../../Types/Types";
+import {EpisodeType, SearchingEpisodesParamsType} from "../../../Types/Types";
 import Episode from "./Episode/Episode";
 import {Collapse, List} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import KeyboardArrowUpIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {makeStyles} from "@material-ui/core/styles";
+import SearchEpisodesContainer from "./SearchEpisodes/SearchEpisodesContainer";
 
 type PropTypes = {
     episodes: Array<EpisodeType>
     totalPagesCount: number
-    currentPage: number
-    getEpisodes: (currentPage: number) => void
+    showEpisodesFromSearch: boolean
+    searchingParams: SearchingEpisodesParamsType
+    getEpisodes: () => void
     setCurrentEpisode: (currentPage: number) => void
+    setShowEpisodesFromSearch: (showEpisodesFromSearch: boolean) => void
+    getEpisodesFromSearch: (searchingParams: SearchingEpisodesParamsType) => void
+
 }
 
 const useStyles = makeStyles({
@@ -27,7 +32,8 @@ const useStyles = makeStyles({
 });
 
 const Episodes: React.FC<PropTypes> = (props) => {
-    const {episodes, totalPagesCount, currentPage, getEpisodes, setCurrentEpisode} = props;
+    const {episodes, showEpisodesFromSearch, setShowEpisodesFromSearch,
+        getEpisodes, searchingParams, getEpisodesFromSearch} = props;
     const [panelIsOpen, setPanelIsOpen] = useState(false);
     const classes = useStyles();
     let episodesElements = episodes.map(item => <Episode key={item.id} episode={item}/>);
@@ -35,16 +41,23 @@ const Episodes: React.FC<PropTypes> = (props) => {
         setPanelIsOpen(!panelIsOpen);
     };
     const onShowAllClick = () => {
-        //setShowCharactersFromSearch(false)
-        //setCurrentPage(1);
+        setShowEpisodesFromSearch(false)
     }
+
     useEffect(() => {
-        getEpisodes(currentPage);
-    }, [currentPage]);
+        if (!showEpisodesFromSearch) {
+            getEpisodes();
+        } else {
+            getEpisodesFromSearch(searchingParams);
+            console.log('test')
+        }
+
+    }, [searchingParams.name, searchingParams.episode, showEpisodesFromSearch]);
+
     return (
         <>
             <Collapse in={panelIsOpen} timeout="auto" unmountOnExit>
-                Test
+                <SearchEpisodesContainer/>
             </Collapse>
             <Button onClick={onSearchEpisodesClick}
                     className={classes.button}
@@ -53,7 +66,7 @@ const Episodes: React.FC<PropTypes> = (props) => {
                 {panelIsOpen ? 'Close search' : 'Open search'}
             </Button>
             <Button onClick={onShowAllClick}
-                    // disabled={!showEpisodesFromSearch}
+                    disabled={!showEpisodesFromSearch}
                     className={classes.button}
                     variant='contained'>
                 Show all

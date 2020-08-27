@@ -4,12 +4,8 @@ import {
     Button,
     Card,
     CardMedia,
-    CircularProgress, createStyles,
+    CircularProgress,
     Grid, List, ListItem,
-    Paper,
-    Table, TableBody, TableCell,
-    TableContainer,
-    TableRow, Theme, withStyles
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {Link as RouterLink, LinkProps as RouterLinkProps} from "react-router-dom";
@@ -60,7 +56,7 @@ const useStyles = makeStyles({
 
 function ListItemLink(props: any) {
     const classes = useStyles()
-    const {icon, primary, to} = props;
+    const {icon, primary, to, onClick} = props;
     const renderLink = React.useMemo(
         () =>
             React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
@@ -70,7 +66,7 @@ function ListItemLink(props: any) {
     );
     return (
         <li className={classes.episode}>
-            <ListItem button component={renderLink}>
+            <ListItem button component={renderLink} onClick={onClick}>
                 {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
                 <Typography color='primary' variant='subtitle1'>
                     <ListItemText primary={primary}/>
@@ -85,11 +81,16 @@ type PropsType = {
     totalCharactersCount: number
     isLoading: boolean
     currentCharacterId: number
-    getCurrentCharacter: (id: number) => void
-    setCurrentCharacterId: (id: number) => void
     match: any
     episodesOfCurrentCharacter: Array<EpisodeType>
-}
+    gettingIdIsStart: boolean
+    idChange: 'prev' | 'next' | undefined
+    getCurrentCharacter: (id: number) => void
+    setCurrentCharacterId: (id: number) => void
+    setCurrentItem: (currentItem: number) => void
+    setGettingIdIsStart: (gettingIdIsStart: boolean, IdChange?: 'next' | 'prev') => void
+    getNextOrPrevId: (currentCharacterId: number, idChange: undefined | 'next' | 'prev') => void
+    }
 
 type PropTypes = {
     leftContent: string
@@ -110,52 +111,73 @@ const RowCustom: React.FC<PropTypes> = (props: PropTypes) => {
 const CharacterInfo: React.FC<PropsType> = (props) => {
     const {
         currentCharacter, totalCharactersCount, match, currentCharacterId,
-        getCurrentCharacter, isLoading, setCurrentCharacterId, episodesOfCurrentCharacter
-    } = props;
+        getCurrentCharacter, isLoading, setCurrentCharacterId, episodesOfCurrentCharacter,
+        setCurrentItem, setGettingIdIsStart, gettingIdIsStart, idChange, getNextOrPrevId} = props;
 
     const classes = useStyles();
-    let id = +match.params.id;
+
+    //let id = +match.params.id;
+    let id = currentCharacterId
 
     const [localeCurrentCharacterId, setLocaleCurrentCharacterId] = useState(0);
+
+    useEffect(() => {
+        if (gettingIdIsStart) {
+            // запустить санку с получением Id  с параметрами idChange и currentCharacterId
+            getNextOrPrevId(currentCharacterId, idChange)
+        }
+    }, [gettingIdIsStart])
 
     useEffect(() => {
         setLocaleCurrentCharacterId(id);
         getCurrentCharacter(id);
     }, []);
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     //     if (localeCurrentCharacterId) {
+    //     //         getCurrentCharacter(localeCurrentCharacterId);
+    //     //     }
+    //     // }, [localeCurrentCharacterId]);
 
-        if (localeCurrentCharacterId) {
-            getCurrentCharacter(localeCurrentCharacterId);
+    useEffect(() => {
+        if (currentCharacterId) {
+            getCurrentCharacter(currentCharacterId);
         }
-    }, [localeCurrentCharacterId]);
+    }, [currentCharacterId]);
 
     const onClickPrev = () => {
-        setLocaleCurrentCharacterId(localeCurrentCharacterId - 1);
+        //setLocaleCurrentCharacterId(localeCurrentCharacterId - 1);
+        setGettingIdIsStart(true, 'prev');
     }
 
     const onClickNext = () => {
-        setLocaleCurrentCharacterId(localeCurrentCharacterId + 1);
+        //setLocaleCurrentCharacterId(localeCurrentCharacterId + 1);
+        setGettingIdIsStart(true, 'next');
     }
-    let idNext = id + 1;
-    let idPrev = id - 1;
+
+    //let idNext = id + 1;
+    //let idPrev = id - 1;
+
+    const onEpisodeClick = () => {
+        setCurrentItem(3);
+    }
 
     return (
-        <div>
+        <>
             {currentCharacter &&
-            <div>
+            <>
+                <div>{currentCharacterId}</div>
                 <Grid container justify='space-between' className={classes.buttons}>
                     <Button
                         onClick={onClickPrev}
                         className={classes.button}
                         component={RouterLink}
-                        to={`/characters/${idPrev}`}
+                        to={`/characters/${id - 1}`}
                         disabled={(currentCharacter.id === 1) || isLoading} //
                         variant="contained"
                         color="default"
                         size="medium"
-                        startIcon={<ArrowBackIcon/>}
-                    >
+                        startIcon={<ArrowBackIcon/>}>
                         Previous character
                     </Button>
 
@@ -167,8 +189,7 @@ const CharacterInfo: React.FC<PropsType> = (props) => {
                         variant="contained"
                         color="default"
                         size="medium"
-                        startIcon={<PeopleIcon/>}
-                    >
+                        startIcon={<PeopleIcon/>}>
                         Back to characters
                     </Button>
 
@@ -176,17 +197,15 @@ const CharacterInfo: React.FC<PropsType> = (props) => {
                         onClick={onClickNext}
                         className={classes.button}
                         component={RouterLink}
-                        to={`/characters/${idNext}`}
+                        to={`/characters/${id + 1}`}
                         disabled={(currentCharacter.id === totalCharactersCount) || isLoading}
                         variant="contained"
                         color="default"
                         size="medium"
-                        endIcon={<ArrowForwardIcon/>}
-                    >
+                        endIcon={<ArrowForwardIcon/>}>
                         Next character
                     </Button>
                 </Grid>
-
 
                 {isLoading ? <CircularProgress size={100} color={'secondary'}/> :
                     <div>
@@ -210,19 +229,16 @@ const CharacterInfo: React.FC<PropsType> = (props) => {
                         </Typography>
                         <List>
                             {episodesOfCurrentCharacter.map(episode => <ListItemLink
+                                onClick={onEpisodeClick}
                                 key={episode.id}
                                 to={`/episodes/${episode.id}`}
                                 primary={`${episode.episode} - ${episode.name}`}>
                             </ListItemLink>)}
                         </List>
                     </div>
-
-
                 }
-
-
-            </div>}
-        </div>
+            </>}
+        </>
     )
 };
 

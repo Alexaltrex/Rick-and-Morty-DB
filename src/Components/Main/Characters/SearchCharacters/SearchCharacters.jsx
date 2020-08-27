@@ -1,56 +1,10 @@
 import React from 'react';
-import {Button, TextField, Typography} from "@material-ui/core";
+import {Button, Typography} from "@material-ui/core";
 import {reduxForm, Field} from 'redux-form'
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
 import {makeStyles} from "@material-ui/core/styles";
 import SearchIcon from '@material-ui/icons/Search';
-
-///////////////////////////////////////////////////////////////
-const RenderTextField = ({
-                             label,
-                             input,
-                             meta: {touched, invalid, error},
-                             ...custom
-                         }) => (
-
-    <TextField
-        label={label}
-        placeholder={label}
-        error={touched && invalid}
-        helperText={touched && error}
-        {...input}
-        {...custom}
-    />
-
-
-);
-
-/////////////////////////////////////////////////////////////
-const RenderSelectField = ({
-                               input,
-                               label,
-                               meta: {touched, error},
-                               children,
-                               ...custom
-                           }) => (
-    <FormControl>
-        <InputLabel htmlFor={label}>{label}</InputLabel>
-        <Select
-            native
-            {...input}
-            {...custom}
-            inputProps={{
-                name: label,
-                id: label
-            }}
-        >
-            {children}
-        </Select>
-
-    </FormControl>
-);
+import RenderTextField from "../../../Common/RenderTextField/RenderTextField";
+import RenderSelectField from "../../../Common/RenderSelectField/RenderSelectField";
 
 const useStyles = makeStyles({
     field: {
@@ -62,7 +16,6 @@ const useStyles = makeStyles({
         marginRight: 10
     }
 });
-
 
 //////////////////////////////////////////////////////////////////////////////////
 const SearchCharactersForm = (props) => {
@@ -115,6 +68,7 @@ const SearchCharactersForm = (props) => {
         </form>
     )
 };
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 const validate = (values) => {
     const empty = (str) => /^\s+$/.test(str)
@@ -152,13 +106,12 @@ const SearchCharacters = (props) => {
         // setSearchingParams(formValue)
         // setShowCharactersFromSearch(true);
         // }
-
         console.log(formValue)
         setCurrentPage(1)
         setSearchingParams(formValue)
         setShowCharactersFromSearch(true);
 
-    }
+    };
     return (
         <ReduxSearchCharactersForm onSubmit={onSubmit}/>
     )

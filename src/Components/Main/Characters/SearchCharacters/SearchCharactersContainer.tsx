@@ -2,7 +2,7 @@ import SearchCharacters from "./SearchCharacters";
 import {connect} from "react-redux";
 import {StateType} from "../../../../store/store";
 import {charactersAC} from "../../../../store/characters-reducer";
-import {SearchingParamsType} from "../../../../Types/Types";
+import {SearchingCharactersParamsType} from "../../../../Types/Types";
 
 const mapStateToProps = (state: StateType): MapStatePropsType => ({
 
@@ -23,7 +23,7 @@ type MapStatePropsType = {
 
 type MapDispatchPropsType = {
     setShowCharactersFromSearch: (showCharactersFromSearch: boolean) => void
-    setSearchingParams: (searchingParams: SearchingParamsType) => void
+    setSearchingParams: (searchingParams: SearchingCharactersParamsType) => void
     setCurrentPage: (currentPage: number) => void
 }
 

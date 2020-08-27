@@ -1,31 +1,29 @@
 import SearchEpisodes from "./SearchEpisodes";
 import {connect} from "react-redux";
 import {StateType} from "../../../../store/store";
-import {charactersAC} from "../../../../store/characters-reducer";
-import {SearchingParamsType} from "../../../../Types/Types";
+import {SearchingEpisodesParamsType} from "../../../../Types/Types";
+import {episodesAC} from "../../../../store/episodes-reducer";
 
 const mapStateToProps = (state: StateType): MapStatePropsType => ({
 
 });
 
-const setShowCharactersFromSearch = charactersAC.setShowCharactersFromSearch;
-const setSearchingParams = charactersAC.setSearchingParams;
-const setCurrentPage = charactersAC.setCurrentPage;
+const setShowEpisodesFromSearch = episodesAC.setShowEpisodesFromSearch;
+const setSearchingParams = episodesAC.setSearchingParams;
 
 const SearchEpisodesContainer = connect<MapStatePropsType,
     MapDispatchPropsType,
     OwnPropsType,
-    StateType>(mapStateToProps, {setShowCharactersFromSearch, setSearchingParams, setCurrentPage})(SearchEpisodes);
+    StateType>(mapStateToProps, {setShowEpisodesFromSearch, setSearchingParams})(SearchEpisodes);
 
 type MapStatePropsType = {
 
 }
 
 type MapDispatchPropsType = {
-    setShowCharactersFromSearch: (showCharactersFromSearch: boolean) => void
-    setSearchingParams: (searchingParams: SearchingParamsType) => void
-    setCurrentPage: (currentPage: number) => void
-}
+    setShowEpisodesFromSearch: (showEpisodesFromSearch: boolean) => void
+    setSearchingParams: (searchingParams: SearchingEpisodesParamsType) => void
+   }
 
 type OwnPropsType = {
 

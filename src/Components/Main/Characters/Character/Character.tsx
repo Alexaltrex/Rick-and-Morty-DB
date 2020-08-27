@@ -6,6 +6,7 @@ import {Link as RouterLink} from "react-router-dom";
 
 type PropTypes = {
     character: CharacterType
+    setCurrentCharacterId: (currentCharacterId: number) => void
 }
 
 const useStyles = makeStyles({
@@ -17,16 +18,16 @@ const useStyles = makeStyles({
     },
 });
 
-const Character: React.FC<PropTypes> = ({character}) => {
+const Character: React.FC<PropTypes> = ({character, setCurrentCharacterId}) => {
     const classes = useStyles();
     const onClick = () => {
-
+        setCurrentCharacterId(character.id);
     }
     return (
         <Grid item>
             <Card className={classes.root}>
                 <CardActionArea component={RouterLink}
-                onClick={onClick}
+                                onClick={onClick}
                                 to={`characters/${character.id}`}>
                     <CardMedia className={classes.media}
                                image={character.image}

@@ -45,10 +45,15 @@ export type EpisodesDataType = {
     results: Array<EpisodeType>
 }
 
-export type SearchingParamsType = {
+export type SearchingCharactersParamsType = {
     name: string,
     gender: string
     status: string
     species: string
     type: string
+}
+
+export type SearchingEpisodesParamsType = {
+    name: string,
+    episode: string
 }

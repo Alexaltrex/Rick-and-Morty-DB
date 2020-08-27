@@ -1,5 +1,12 @@
 import axios from "axios";
-import {CharactersDataType, CharacterType, EpisodesDataType, EpisodeType, SearchingParamsType} from "../Types/Types";
+import {
+    CharactersDataType,
+    CharacterType,
+    EpisodesDataType,
+    EpisodeType,
+    SearchingCharactersParamsType, SearchingEpisodesParamsType,
+
+} from "../Types/Types";
 
 const instance = axios.create({
     baseURL: 'https://rickandmortyapi.com/api/'
@@ -19,7 +26,7 @@ export const charactersAPI = {
         return response.data
     },
 
-    async searchCharacters(searchingParams: SearchingParamsType, currentPage: number) {
+    async searchCharacters(searchingParams: SearchingCharactersParamsType, currentPage: number) {
         let str = '';
         if (searchingParams.name) str = `${str}name=${searchingParams.name}`;
         if (searchingParams.gender) str = `${str}&gender=${searchingParams.gender}`;
@@ -45,5 +52,16 @@ export const episodesAPI = {
     async getEpisodesByUrl(url: string) {
         let response = await axios.get<EpisodeType>(url);
         return response.data
+    },
+    async searchEpisodes(searchingParams: SearchingEpisodesParamsType, currentPage = 1) {
+        let str = '';
+        if (searchingParams.name) str = `${str}name=${searchingParams.name}`;
+        if (searchingParams.episode) str = `${str}&episode=${searchingParams.episode}`;
+        str = `${str}&page=${currentPage}`
+        let response = await instance.get<EpisodesDataType>(`episode/?${str}`);
+        console.log(str)
+        console.log(response.data)
+        return response.data
+
     }
 };

@@ -1,4 +1,4 @@
-import {CharactersDataType, CharacterType, EpisodeType, InfoType, SearchingParamsType} from "../Types/Types";
+import {CharactersDataType, CharacterType, EpisodeType, SearchingCharactersParamsType} from "../Types/Types";
 import {GetActionsType, StateType} from "./store";
 import {ThunkAction} from "redux-thunk";
 import {charactersAPI, episodesAPI} from "../DAL/api";
@@ -19,7 +19,9 @@ const initialState = {
         name: '', gender: '', status: '', species: '', type: ''
     },
     searchError: false,
-    episodesOfCurrentCharacter: null as null | Array<EpisodeType>
+    episodesOfCurrentCharacter: null as null | Array<EpisodeType>,
+    gettingIdIsStart: false, // запрос на получение следующего/предыдущего id начат
+    idChange: undefined as undefined | 'next' | 'prev'
 };
 
 export type InitialStateType = typeof initialState;
@@ -53,7 +55,7 @@ const charactersReducer = (state = initialState, action: CharactersActionsType):
         }
         case 'CHARACTERS/SET_SEARCHING_PARAMS': {
             return {
-                ...state, searchingParams: {...state.searchingParams, ...action.searchingParams}
+                ...state, searchingParams: action.searchingParams
             }
         }
         case 'CHARACTERS/SET_SEARCH_ERROR': {
@@ -64,6 +66,11 @@ const charactersReducer = (state = initialState, action: CharactersActionsType):
         case 'CHARACTERS/SET_EPISODES_OF_CURRENT_CHARACTER': {
             return {
                 ...state, episodesOfCurrentCharacter: action.episodesOfCurrentCharacter
+            }
+        }
+        case 'CHARACTERS/SET_GETTING_ID_START': {
+            return {
+                ...state, gettingIdIsStart: action.gettingIdIsStart, idChange: action.idChange
             }
         }
         default:
@@ -91,7 +98,7 @@ export const charactersAC = {
         type: 'CHARACTERS/SET_SHOW_CHARACTERS_FROM_SEARCH',
         showCharactersFromSearch
     } as const),
-    setSearchingParams: (searchingParams: SearchingParamsType) => ({
+    setSearchingParams: (searchingParams: SearchingCharactersParamsType) => ({
         type: 'CHARACTERS/SET_SEARCHING_PARAMS',
         searchingParams
     } as const),
@@ -99,6 +106,9 @@ export const charactersAC = {
     setEpisodesOfCurrentCharacter: (episodesOfCurrentCharacter: Array<EpisodeType>) => ({
         type: 'CHARACTERS/SET_EPISODES_OF_CURRENT_CHARACTER',
         episodesOfCurrentCharacter
+    } as const),
+    setGettingIdIsStart: (gettingIdIsStart: boolean, idChange?: 'next' | 'prev') => ({
+        type: 'CHARACTERS/SET_GETTING_ID_START', gettingIdIsStart, idChange
     } as const)
 };
 
@@ -121,23 +131,34 @@ export const getCurrentCharacter = (id: number): ThunkType => async (dispatch) =
     const arrayOfRequests = getCurrentCharacterResponse.episode.map(episodeUrl => episodesAPI.getEpisodesByUrl(episodeUrl))
     let results = await Promise.all(arrayOfRequests);
     dispatch(charactersAC.setEpisodesOfCurrentCharacter(results));
-
     dispatch(charactersAC.toggleLoading(false));
 };
 
-export const getCharactersFromSearch = (searchingParams: SearchingParamsType, currentPage: number): ThunkType => async (dispatch) => {
+export const getCharactersFromSearch = (searchingParams: SearchingCharactersParamsType, currentPage: number): ThunkType => async (dispatch) => {
     try {
         dispatch(charactersAC.toggleLoading(true));
         let data = await charactersAPI.searchCharacters(searchingParams, currentPage);
         dispatch(charactersAC.setSearchError(false))
         dispatch(charactersAC.setCharacters(data));
     } catch (e) {
-        console.log('error')
-        // console.log(data)
         dispatch(charactersAC.setSearchError(true));
     } finally {
         dispatch(charactersAC.toggleLoading(false));
     }
+};
+
+export const getNextOrPrevId = (currentCharacterId: number, idChange: undefined | 'next' | 'prev'): ThunkType => async (dispatch, getState) => {
+    //dispatch(charactersAC.toggleLoading(true));
+    // если характеры НЕ из поиска
+    if (!getState().characters.showCharactersFromSearch) {
+        if (idChange === 'prev') {
+            dispatch(charactersAC.setCurrentCharacterId(currentCharacterId - 1))
+        }
+        if (idChange === 'next') {
+            dispatch(charactersAC.setCurrentCharacterId(currentCharacterId + 1))
+        }
+    }
+    dispatch(charactersAC.setGettingIdIsStart(false))
 }
 
 export default charactersReducer;

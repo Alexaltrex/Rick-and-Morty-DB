@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {CharacterType, SearchingParamsType} from "../../../Types/Types";
+import {CharacterType, SearchingCharactersParamsType} from "../../../Types/Types";
 import Character from "./Character/Character";
 import Paginator from "../../Common/Paginator/Paginator";
 import {Badge, CircularProgress, Collapse} from "@material-ui/core";
@@ -27,14 +27,16 @@ type PropTypes = {
     totalPagesCount: number
     currentPage: number
     showCharactersFromSearch: boolean
-    searchingParams: SearchingParamsType
+    searchingParams: SearchingCharactersParamsType
     isLoading: boolean
     searchError: boolean
     totalCharactersCount: number
     getCharacters: (currentPage: number) => void
     setCurrentPage: (currentPage: number) => void
     setShowCharactersFromSearch: (showCharactersFromSearch: boolean) => void
-    getCharactersFromSearch: (searchingParams: SearchingParamsType, currentPage: number) => void
+    getCharactersFromSearch: (searchingParams: SearchingCharactersParamsType, currentPage: number) => void
+    setSearchError: (searchError: boolean) => void
+    setCurrentCharacterId: (currentCharacterId: number) => void
 }
 
 const Characters: React.FC<PropTypes> = (props: PropTypes) => {
@@ -42,8 +44,8 @@ const Characters: React.FC<PropTypes> = (props: PropTypes) => {
         characters, totalPagesCount, currentPage, totalCharactersCount,
         getCharacters, setCurrentPage, searchError,
         showCharactersFromSearch, setShowCharactersFromSearch,
-        getCharactersFromSearch, searchingParams, isLoading
-    } = props;
+        getCharactersFromSearch, searchingParams, isLoading, setSearchError,
+        setCurrentCharacterId} = props;
 
     const classes = useStyles();
     const [panelIsOpen, setPanelIsOpen] = useState(false);
@@ -59,6 +61,7 @@ const Characters: React.FC<PropTypes> = (props: PropTypes) => {
         searchingParams.name, searchingParams.gender, searchingParams.type, showCharactersFromSearch]);
 
     let charactersElements = characters.map(item => <Character key={item.id}
+                                                               setCurrentCharacterId={setCurrentCharacterId}
                                                                character={item}/>);
 
     const onPaginatorItemClick = (currentPage: number) => {
@@ -70,6 +73,7 @@ const Characters: React.FC<PropTypes> = (props: PropTypes) => {
     };
 
     const onShowAllClick = () => {
+        setSearchError(false)
         setShowCharactersFromSearch(false)
         setCurrentPage(1);
     }
@@ -96,7 +100,7 @@ const Characters: React.FC<PropTypes> = (props: PropTypes) => {
 
             <div className={classes.count}>
                 {`Total characters count: `}
-                <Badge badgeContent={totalOutputCount} color="primary" max={99999}>
+                <Badge badgeContent={totalOutputCount} color="primary" max={99999} showZero>
                     <PeopleIcon/>
                 </Badge>
             </div>
