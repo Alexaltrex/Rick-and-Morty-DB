@@ -1,24 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {EpisodeType, SearchingEpisodesParamsType} from "../../../Types/Types";
 import Episode from "./Episode/Episode";
-import {Collapse, List} from "@material-ui/core";
+import {Badge, CircularProgress, Collapse, List} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {makeStyles} from "@material-ui/core/styles";
 import SearchEpisodesContainer from "./SearchEpisodes/SearchEpisodesContainer";
-
-type PropTypes = {
-    episodes: Array<EpisodeType>
-    totalPagesCount: number
-    showEpisodesFromSearch: boolean
-    searchingParams: SearchingEpisodesParamsType
-    getEpisodes: () => void
-    setCurrentEpisode: (currentPage: number) => void
-    setShowEpisodesFromSearch: (showEpisodesFromSearch: boolean) => void
-    getEpisodesFromSearch: (searchingParams: SearchingEpisodesParamsType) => void
-
-}
+import {EpisodesPropsType} from "./EpisodesContainer";
+import MovieIcon from '@material-ui/icons/Movie';
 
 const useStyles = makeStyles({
     button: {
@@ -28,52 +18,87 @@ const useStyles = makeStyles({
     count: {
         marginTop: 20,
         marginBottom: 20
+    },
+    circular: {
+        display: 'flex',
+        justifyContent: 'center'
     }
 });
 
-const Episodes: React.FC<PropTypes> = (props) => {
-    const {episodes, showEpisodesFromSearch, setShowEpisodesFromSearch,
-        getEpisodes, searchingParams, getEpisodesFromSearch} = props;
+const Episodes: React.FC<EpisodesPropsType> = (props) => {
+    const {
+        episodes, showEpisodesFrom, setShowEpisodesFrom,
+        getEpisodes, searchingParams, getEpisodesFromSearch,
+        isLoading, totalEpisodesCount, currentCharacter
+    } = props;
     const [panelIsOpen, setPanelIsOpen] = useState(false);
+
     const classes = useStyles();
+
     let episodesElements = episodes.map(item => <Episode key={item.id} episode={item}/>);
+
     const onSearchEpisodesClick = () => {
         setPanelIsOpen(!panelIsOpen);
     };
+
     const onShowAllClick = () => {
-        setShowEpisodesFromSearch(false)
+        setShowEpisodesFrom('all')
     }
 
     useEffect(() => {
-        if (!showEpisodesFromSearch) {
+        if (showEpisodesFrom === 'all') {
             getEpisodes();
-        } else {
+        }
+        if (showEpisodesFrom === 'search') {
             getEpisodesFromSearch(searchingParams);
-            console.log('test')
         }
 
-    }, [searchingParams.name, searchingParams.episode, showEpisodesFromSearch]);
+    }, [searchingParams.name, searchingParams.episode, showEpisodesFrom]);
 
     return (
         <>
-            <Collapse in={panelIsOpen} timeout="auto" unmountOnExit>
-                <SearchEpisodesContainer/>
-            </Collapse>
+            <div>
+                <Collapse in={panelIsOpen} timeout="auto" unmountOnExit>
+                    <SearchEpisodesContainer/>
+                </Collapse>
+            </div>
+
             <Button onClick={onSearchEpisodesClick}
                     className={classes.button}
                     startIcon={panelIsOpen ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                     variant='contained'>
                 {panelIsOpen ? 'Close search' : 'Open search'}
             </Button>
+
             <Button onClick={onShowAllClick}
-                    disabled={!showEpisodesFromSearch}
+                    disabled={showEpisodesFrom === 'all'}
                     className={classes.button}
                     variant='contained'>
                 Show all
             </Button>
-            <List>
-                {episodesElements}
-            </List>
+
+            {showEpisodesFrom === 'search' && <div className={classes.count}>
+                {'List of the episodes from search'}
+            </div>}
+
+            {showEpisodesFrom === 'character' && <div className={classes.count}>
+                {currentCharacter && `List of the episodes in which this character have been seen: ${currentCharacter.name}`}
+            </div>}
+
+            <div className={classes.count}>
+                {`Total episodes count: `}
+                <Badge badgeContent={totalEpisodesCount} color="primary" max={99999} showZero>
+                    <MovieIcon/>
+                </Badge>
+            </div>
+
+            {isLoading
+                ? <div className={classes.circular}>
+                    <CircularProgress size={100} color={'secondary'}/>
+                </div>
+                : <List>
+                    {episodesElements}
+                </List>}
         </>
     )
 };

@@ -1,4 +1,5 @@
 import {
+    CharactersDataType,
     CharacterType,
     EpisodesDataType,
     EpisodeType,
@@ -7,32 +8,28 @@ import {
 import {GetActionsType, StateType} from "./store";
 import {ThunkAction} from "redux-thunk";
 import {charactersAPI, episodesAPI} from "../DAL/api";
+import {appAC, AppActionsType} from "./app-reducer";
 import {charactersAC} from "./characters-reducer";
 
 const initialState = {
-    initialized: false, // нужен?
     episodes: [] as Array<EpisodeType>,
     totalEpisodesCount: 0, // нужен?
     totalPagesCount: 0,
     currentEpisode: {} as EpisodeType,
     next: null as string | null,
     prev: null as string | null,
-    isLoading: false,
     charactersOfCurrentEpisode: null as null | Array<CharacterType>,
-    showEpisodesFromSearch: false,
+    showEpisodesFrom: 'all' as 'all' | 'search' | 'character',
     searchingParams: {
         name: '', episode: ''
     },
-    searchError: false
+    aroundId: {prevId: null as null | number, nextId: null as null | number},
 };
 
 export type InitialStateType = typeof initialState;
 
 const episodesReducer = (state = initialState, action: EpisodesActionsType): InitialStateType => {
     switch (action.type) {
-        case 'EPISODES/TOGGLE_LOADING': {
-            return {...state, isLoading: action.isLoading}
-        }
         case 'EPISODES/SET_EPISODES': {
             return {
                 ...state,
@@ -49,13 +46,16 @@ const episodesReducer = (state = initialState, action: EpisodesActionsType): Ini
         case 'EPISODES/SET_CHARACTERS_OF_CURRENT_EPISODE': {
             return {...state, charactersOfCurrentEpisode: action.charactersOfCurrentEpisode}
         }
-        case 'EPISODES/SET_SHOW_EPISODES_FROM_SEARCH': {
-            return {...state, showEpisodesFromSearch: action.showEpisodesFromSearch}
+        case 'EPISODES/SET_SHOW_EPISODES_FROM': {
+            return {...state, showEpisodesFrom: action.showEpisodesFrom}
         }
         case 'EPISODES/SET_SEARCHING_PARAMS': {
             return {
                 ...state, searchingParams: action.searchingParams
             }
+        }
+        case 'EPISODES/SET_AROUND_ID': {
+            return {...state, aroundId: {prevId: action.prevId, nextId: action.nextId}}
         }
         default:
             return state;
@@ -63,11 +63,9 @@ const episodesReducer = (state = initialState, action: EpisodesActionsType): Ini
 };
 
 type EpisodesActionsType = GetActionsType<typeof episodesAC>
-type ThunkType = ThunkAction<Promise<void>, StateType, unknown, EpisodesActionsType>
+type ThunkType = ThunkAction<Promise<void>, StateType, unknown, EpisodesActionsType | AppActionsType>
 
 export const episodesAC = {
-    setInitialized: () => ({type: 'EPISODES/SET_INITIALIZED'} as const),
-    toggleLoading: (isLoading: boolean) => ({type: 'EPISODES/TOGGLE_LOADING', isLoading} as const),
     setEpisodes: (episodesData: EpisodesDataType) => ({type: 'EPISODES/SET_EPISODES', episodesData} as const),
     setCurrentEpisode: (currentEpisode: EpisodeType) => ({
         type: 'EPISODES/SET_CURRENT_EPISODE',
@@ -77,20 +75,23 @@ export const episodesAC = {
         type: 'EPISODES/SET_CHARACTERS_OF_CURRENT_EPISODE',
         charactersOfCurrentEpisode
     } as const),
-    setShowEpisodesFromSearch: (showEpisodesFromSearch: boolean) => ({
-        type: 'EPISODES/SET_SHOW_EPISODES_FROM_SEARCH',
-        showEpisodesFromSearch
+    setShowEpisodesFrom: (showEpisodesFrom: 'all' | 'search' | 'character') => ({
+        type: 'EPISODES/SET_SHOW_EPISODES_FROM', showEpisodesFrom
     } as const),
     setSearchingParams: (searchingParams: SearchingEpisodesParamsType) => ({
         type: 'EPISODES/SET_SEARCHING_PARAMS',
         searchingParams
     } as const),
-    setSearchError: (searchError: boolean) => ({type: 'EPISODES/SET_SEARCH_ERROR', searchError} as const),
+    setAroundId: (prevId: number | null, nextId: number | null) => ({
+        type: 'EPISODES/SET_AROUND_ID',
+        prevId,
+        nextId
+    } as const),
 }
 
 
 export const getEpisodes = (): ThunkType => async (dispatch, getState) => {
-    dispatch(episodesAC.toggleLoading(true));
+    dispatch(appAC.toggleLoading(true));
     // 1 - получение числа страниц totalPagesCount
     const resultWithTotalPageCount = await episodesAPI.getEpisodes();
     const totalPagesCount = resultWithTotalPageCount.info.pages;
@@ -111,11 +112,11 @@ export const getEpisodes = (): ThunkType => async (dispatch, getState) => {
     //data.results = [...results[0].results, ...results[1].results, ...results[2].results]
     // 3 - запись ВСЕХ эпизодов в store
     dispatch(episodesAC.setEpisodes(data))
-    dispatch(episodesAC.toggleLoading(false));
+    dispatch(appAC.toggleLoading(false));
 };
 
 export const getCurrentEpisode = (id: number): ThunkType => async (dispatch, getState) => {
-    dispatch(episodesAC.toggleLoading(true));
+    dispatch(appAC.toggleLoading(true));
     let getCurrentEpisodeResponse = await episodesAPI.getCurrentEpisode(id);
     dispatch(episodesAC.setCurrentEpisode(getCurrentEpisodeResponse));
     // получение информации о персонажах, относящихся к текущему эпизоду:
@@ -124,12 +125,12 @@ export const getCurrentEpisode = (id: number): ThunkType => async (dispatch, get
     const arrayOfRequests = getCurrentEpisodeResponse.characters.map(url => charactersAPI.getCharacterByUrl(url))
     let results = await Promise.all(arrayOfRequests);
     dispatch(episodesAC.setCharactersOfCurrentEpisode(results));
-    dispatch(episodesAC.toggleLoading(false));
+    dispatch(appAC.toggleLoading(false));
 };
 
 export const getEpisodesFromSearch = (searchingParams: SearchingEpisodesParamsType): ThunkType => async (dispatch) => {
     try {
-        dispatch(episodesAC.toggleLoading(true));
+        dispatch(appAC.toggleLoading(true));
         // 1 - получение числа страниц totalPagesCount
         console.log(searchingParams)
         const resultWithTotalPageCount = await episodesAPI.searchEpisodes(searchingParams);
@@ -150,13 +151,56 @@ export const getEpisodesFromSearch = (searchingParams: SearchingEpisodesParamsTy
         }
         data.results = resultsArray
         // 3 - запись ВСЕХ эпизодов в store
-        dispatch(episodesAC.setSearchError(false))
         dispatch(episodesAC.setEpisodes(data));
     } catch (e) {
-        dispatch(episodesAC.setSearchError(true));
+        const episodesData = {} as EpisodesDataType;
+        episodesData.results = []
+        episodesData.info = {
+            count: 0,
+            pages: 1,
+            prev: null,
+            next: null
+        }
+        dispatch(episodesAC.setEpisodes(episodesData));
+
+
+
+
     } finally {
-        dispatch(episodesAC.toggleLoading(false));
+        dispatch(appAC.toggleLoading(false));
     }
-}
+};
+
+export const getAroundId = (targetId: number, change: null | 'prev' | 'next'): ThunkType => async (dispatch, getState) => {
+    try {
+        /////////// ОБЩЕЕ ////////////////////////////////////////////////////////////////////////
+        dispatch(appAC.toggleLoading(true));
+        let prevId;
+        let nextId;
+        const episodes = getState().episodes.episodes;
+        // позиция id, на который переходим, целевого, в массиве episodes (т.е. на текущей странице)
+        const positionTargetIdInEpisodes = getState().episodes.episodes.findIndex(el => el.id === targetId);// -1 если нет
+        /////////////////////////////////////////////////////////////////////////////////////////
+        // ОПРЕДЕЛЕНИЕ prevId ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (positionTargetIdInEpisodes > 0) {// если целевой ид не первый
+            prevId = episodes[positionTargetIdInEpisodes - 1].id
+        } else {
+            prevId = null
+        }
+        // ОПРЕДЕЛЕНИЕ nextId //////////////////////////////////////////////////////////////////////////////////////////////
+        if (positionTargetIdInEpisodes < episodes.length - 1) { //целевой ид не последний
+            nextId = episodes[positionTargetIdInEpisodes + 1].id;
+        } else {
+            nextId = null;
+        }
+
+        dispatch(episodesAC.setAroundId(prevId, nextId));
+    } catch
+        (e) {
+        dispatch(appAC.setLanError(true));
+    } finally {
+        dispatch(appAC.toggleLoading(false));
+    }
+};
 
 export default episodesReducer;

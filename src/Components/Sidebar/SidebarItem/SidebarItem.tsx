@@ -3,20 +3,23 @@ import ListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import React from "react";
 import ListItem from "@material-ui/core/ListItem";
+import {SidebarItemPropsType} from "./SidebarItemContainer";
 
-type PropsType = {
-    to: string
-    primary: string
-    icon?: React.ReactElement
-    currentItem: number
-    ownIndex: number
-    setCurrentItem: (currentItem: number) => void
-}
+const SidebarItem: React.FC<SidebarItemPropsType> = (props) => {
+    const {to, primary, icon, currentItem, ownIndex, setCurrentSidebarMenuItem,
+        setShowCharactersFrom, setShowEpisodesFrom, setShowLocationsFrom} = props;
 
-
-const SidebarItem: React.FC<PropsType> = ({to, primary, icon, currentItem, ownIndex, setCurrentItem}) => {
     const onClick = () => {
-        setCurrentItem(ownIndex);
+        setCurrentSidebarMenuItem(ownIndex);
+        if (ownIndex === 1) {
+            setShowCharactersFrom('all')
+        }
+        if (ownIndex === 2) {
+            setShowLocationsFrom('all')
+        }
+        if (ownIndex === 3) {
+            setShowEpisodesFrom('all')
+        }
     }
 
     return (

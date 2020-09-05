@@ -3,49 +3,55 @@ import {connect} from "react-redux";
 import CharacterInfo from "./CharacterInfo";
 import {withRouter} from "react-router-dom";
 import {StateType} from "../../../../store/store";
-import {charactersAC, getCurrentCharacter, getNextOrPrevId} from "../../../../store/characters-reducer";
-import {CharacterType, EpisodeType} from "../../../../Types/Types";
+import {charactersAC, getAroundId, getCurrentCharacter} from "../../../../store/characters-reducer";
+import {CharacterType, EpisodesDataType, EpisodeType} from "../../../../Types/Types";
 import React from "react";
-import {setCurrentItem} from "../../../../store/sidebar-reducer";
+import {sidebarAC} from "../../../../store/sidebar-reducer";
+import {episodesAC} from "../../../../store/episodes-reducer";
 
 type MapStatePropsType = {
     currentCharacter: CharacterType | undefined | null
-    totalCharactersCount: number
     isLoading: boolean
-    currentCharacterId: number | null
     episodesOfCurrentCharacter: Array<EpisodeType> | null
-    gettingIdIsStart: boolean
-    idChange: 'prev' | 'next' | undefined
+    aroundId: { prevId: null | number, nextId: null | number }
+    lanError: boolean
+    showCharactersFrom: 'all' | 'search' | 'episode' | 'location'
 }
 
 type MapDispatchPropsType = {
     getCurrentCharacter: (id: number) => void
-    setCurrentCharacterId: (id: number) => void
-    setCurrentItem: (currentItem: number) => void
-    setGettingIdIsStart: (gettingIdIsStart: boolean, idChange?: 'next' | 'prev') => void
-    getNextOrPrevId: (currentCharacterId: number, idChange: undefined | 'next' | 'prev') => void
+    setCurrentSidebarMenuItem: (currentItem: number) => void
+    getAroundId: (currentCharacterId: number, change: null | 'prev' | 'next') => void
+    setShowCharactersFrom: (showCharactersFrom: 'all' | 'search' | 'episode' | 'location') => void
+    setShowEpisodesFrom: (showEpisodesFrom: 'all' | 'search' | 'character') => void
+    setEpisodes: (episodesData: EpisodesDataType) => void
 }
 
-type OwnPropsType = {}
+export type CharactersInfoPropsType = MapStatePropsType & MapDispatchPropsType
+
+// currentCharacterId,setCurrentCharacterId, setStartGettingAroundId, startGettingAroundId,idChange, idForSearch, setCurrentCharacter,
 
 const mapStateToProps = (state: StateType): MapStatePropsType => ({
+    isLoading: state.app.isLoading,
+    lanError: state.app.lanError,
     currentCharacter: state.characters.currentCharacter,
-    totalCharactersCount: state.characters.totalCharactersCount,
-    isLoading: state.characters.isLoading,
-    currentCharacterId: state.characters.currentCharacterId,
     episodesOfCurrentCharacter: state.characters.episodesOfCurrentCharacter,
-    gettingIdIsStart: state.characters.gettingIdIsStart,
-    idChange: state.characters.idChange
+    aroundId: state.characters.aroundId,
+    showCharactersFrom: state.characters.showCharactersFrom,
 });
 
-const setCurrentCharacterId = charactersAC.setCurrentCharacterId;
-const setGettingIdIsStart = charactersAC.setGettingIdIsStart
+const setShowCharactersFrom = charactersAC.setShowCharactersFrom;
+const setCurrentSidebarMenuItem = sidebarAC.setCurrentSidebarMenuItem;
+const setShowEpisodesFrom = episodesAC.setShowEpisodesFrom;
+const setEpisodes = episodesAC.setEpisodes;
 
-const CharacterInfoContainer = compose(connect<MapStatePropsType,
+const CharacterInfoContainer = compose<React.ComponentType>(connect<MapStatePropsType,
     MapDispatchPropsType,
-    OwnPropsType,
+    {},
     StateType>(mapStateToProps,
-    {getCurrentCharacter, setCurrentCharacterId,
-        setGettingIdIsStart, setCurrentItem, getNextOrPrevId}), withRouter)(CharacterInfo);
+    {
+        getCurrentCharacter, setCurrentSidebarMenuItem, getAroundId,
+        setShowCharactersFrom, setShowEpisodesFrom, setEpisodes
+    }), withRouter)(CharacterInfo);
 
 export default CharacterInfoContainer;

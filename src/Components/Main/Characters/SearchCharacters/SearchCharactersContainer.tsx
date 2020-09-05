@@ -4,31 +4,28 @@ import {StateType} from "../../../../store/store";
 import {charactersAC} from "../../../../store/characters-reducer";
 import {SearchingCharactersParamsType} from "../../../../Types/Types";
 
-const mapStateToProps = (state: StateType): MapStatePropsType => ({
+const mapStateToProps = (state: StateType): MapStatePropsType => ({});
 
-});
-
-const setShowCharactersFromSearch = charactersAC.setShowCharactersFromSearch;
 const setSearchingParams = charactersAC.setSearchingParams;
 const setCurrentPage = charactersAC.setCurrentPage;
+const setShowCharactersFrom = charactersAC.setShowCharactersFrom;
+
 
 const SearchCharactersContainer = connect<MapStatePropsType,
-    MapDispatchPropsType,
-    OwnPropsType,
-    StateType>(mapStateToProps, {setShowCharactersFromSearch, setSearchingParams, setCurrentPage})(SearchCharacters);
+    MapDispatchPropsType, {}, StateType>(mapStateToProps,
+    {setSearchingParams, setCurrentPage, setShowCharactersFrom})(SearchCharacters);
 
-type MapStatePropsType = {
-
-}
+type MapStatePropsType = {}
 
 type MapDispatchPropsType = {
-    setShowCharactersFromSearch: (showCharactersFromSearch: boolean) => void
     setSearchingParams: (searchingParams: SearchingCharactersParamsType) => void
     setCurrentPage: (currentPage: number) => void
+    setShowCharactersFrom: (showCharactersFrom: 'all' | 'search' | 'episode') => void
 }
 
-type OwnPropsType = {
+export type SearchCharactersPropsType = MapStatePropsType & MapDispatchPropsType;
 
-}
+
+
 
 export default SearchCharactersContainer;

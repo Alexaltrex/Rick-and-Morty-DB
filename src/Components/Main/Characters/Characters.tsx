@@ -1,8 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {CharacterType, SearchingCharactersParamsType} from "../../../Types/Types";
 import Character from "./Character/Character";
 import Paginator from "../../Common/Paginator/Paginator";
-import {Badge, CircularProgress, Collapse} from "@material-ui/core";
+import {
+    Badge,
+    CircularProgress,
+    Collapse,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle
+} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import SearchCharactersContainer from "./SearchCharacters/SearchCharactersContainer";
@@ -10,6 +17,8 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {makeStyles} from "@material-ui/core/styles";
 import PeopleIcon from '@material-ui/icons/People';
+import {CharactersPropsType} from "./CharactersContainer";
+import Preloader from "../../Common/Preloader/Preloader";
 
 const useStyles = makeStyles({
     button: {
@@ -19,49 +28,33 @@ const useStyles = makeStyles({
     count: {
         marginTop: 20,
         marginBottom: 20
-    }
+    },
 });
 
-type PropTypes = {
-    characters: Array<CharacterType>
-    totalPagesCount: number
-    currentPage: number
-    showCharactersFromSearch: boolean
-    searchingParams: SearchingCharactersParamsType
-    isLoading: boolean
-    searchError: boolean
-    totalCharactersCount: number
-    getCharacters: (currentPage: number) => void
-    setCurrentPage: (currentPage: number) => void
-    setShowCharactersFromSearch: (showCharactersFromSearch: boolean) => void
-    getCharactersFromSearch: (searchingParams: SearchingCharactersParamsType, currentPage: number) => void
-    setSearchError: (searchError: boolean) => void
-    setCurrentCharacterId: (currentCharacterId: number) => void
-}
-
-const Characters: React.FC<PropTypes> = (props: PropTypes) => {
+const Characters: React.FC<CharactersPropsType> = (props) => {
     const {
-        characters, totalPagesCount, currentPage, totalCharactersCount,
-        getCharacters, setCurrentPage, searchError,
-        showCharactersFromSearch, setShowCharactersFromSearch,
-        getCharactersFromSearch, searchingParams, isLoading, setSearchError,
-        setCurrentCharacterId} = props;
+        characters, totalPagesCount, currentPage,
+        getCharacters, setCurrentPage, totalCharactersCount,
+        getCharactersFromSearch, searchingParams, isLoading,
+        lanError, setShowCharactersFrom, showCharactersFrom, currentEpisode,
+        currentLocation
+    } = props;
 
     const classes = useStyles();
     const [panelIsOpen, setPanelIsOpen] = useState(false);
 
     useEffect(() => {
-        if (!showCharactersFromSearch) {
+        if (showCharactersFrom === 'all') {
             getCharacters(currentPage);
-        } else {
+        }
+        if (showCharactersFrom === 'search') {
             getCharactersFromSearch(searchingParams, currentPage)
         }
 
     }, [currentPage, searchingParams.status, searchingParams.species,
-        searchingParams.name, searchingParams.gender, searchingParams.type, showCharactersFromSearch]);
+        searchingParams.name, searchingParams.gender, searchingParams.type, showCharactersFrom]);
 
     let charactersElements = characters.map(item => <Character key={item.id}
-                                                               setCurrentCharacterId={setCurrentCharacterId}
                                                                character={item}/>);
 
     const onPaginatorItemClick = (currentPage: number) => {
@@ -73,50 +66,93 @@ const Characters: React.FC<PropTypes> = (props: PropTypes) => {
     };
 
     const onShowAllClick = () => {
-        setSearchError(false)
-        setShowCharactersFromSearch(false)
+        setShowCharactersFrom('all')
         setCurrentPage(1);
     }
 
-    let totalOutputCount = searchError ? 0 : totalCharactersCount;
+    const [open, setOpen] = React.useState(false);
+
+    useEffect(() => {
+        if (lanError) {
+            setOpen(true)
+        }
+    }, [lanError])
+
+    const handleOk = () => {
+        setOpen(false);
+    };
+
 
     return (
         <>
-            <Collapse in={panelIsOpen} timeout="auto" unmountOnExit>
-                <SearchCharactersContainer/>
-            </Collapse>
-            <Button onClick={onSearchCharactersClick}
-                    className={classes.button}
-                    startIcon={panelIsOpen ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
-                    variant='contained'>
-                {panelIsOpen ? 'Close search' : 'Open search'}
-            </Button>
-            <Button onClick={onShowAllClick}
-                    disabled={!showCharactersFromSearch}
-                    className={classes.button}
-                    variant='contained'>
-                Show all
-            </Button>
+            <div>
+                <Dialog
+                    disableBackdropClick
+                    disableEscapeKeyDown
+                    maxWidth="xs"
+                    aria-labelledby="confirmation-dialog-title"
+                    open={open}
+                >
+                    <DialogTitle id="confirmation-dialog-title">Error</DialogTitle>
+                    <DialogContent>
+                        Some error occurred on the network
+                    </DialogContent>
+                    <DialogActions>
+                        <Button autoFocus onClick={handleOk} color="primary">
+                            Ok
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
-            <div className={classes.count}>
-                {`Total characters count: `}
-                <Badge badgeContent={totalOutputCount} color="primary" max={99999} showZero>
-                    <PeopleIcon/>
-                </Badge>
+                <Collapse in={panelIsOpen} timeout="auto" unmountOnExit>
+                    <SearchCharactersContainer/>
+                </Collapse>
+
+                <Button onClick={onSearchCharactersClick}
+                        className={classes.button}
+                        startIcon={panelIsOpen ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                        variant='contained'>
+                    {panelIsOpen ? 'Close search' : 'Open search'}
+                </Button>
+                <Button onClick={onShowAllClick}
+                        disabled={showCharactersFrom === 'all'}
+                        className={classes.button}
+                        variant='contained'>
+                    Show all
+                </Button>
+
+                {showCharactersFrom === 'episode' && <div className={classes.count}>
+                    {`List of the characters from episode: ${currentEpisode.episode} - ${currentEpisode.name}`}
+                </div>}
+
+                {showCharactersFrom === 'location' && <div className={classes.count}>
+                    {currentLocation && `List of the characters from location: ${currentLocation.name}`}
+                </div>}
+
+                {showCharactersFrom === 'search' && <div className={classes.count}>
+                    {'List of the characters from search'}
+                </div>}
+
+                <div className={classes.count}>
+                    {`Total characters count: `}
+                    <Badge badgeContent={totalCharactersCount} color="primary" max={99999} showZero>
+                        <PeopleIcon/>
+                    </Badge>
+                </div>
+
+                {!characters.length || showCharactersFrom === 'episode' || showCharactersFrom === 'location' ? null :
+                    <Paginator totalPaginatorPagesCount={totalPagesCount}
+                               onPaginatorItemClick={onPaginatorItemClick}
+                               currentPage={currentPage}
+                    />}
             </div>
 
-
-            {searchError ? null : <Paginator totalPaginatorPagesCount={totalPagesCount}
-                                             onPaginatorItemClick={onPaginatorItemClick}
-                                             currentPage={currentPage}
-            />}
-            {isLoading ? <CircularProgress size={100} color={'secondary'}/> :
-                searchError ? null :
-                    <Grid container alignContent='stretch' justify='space-between' wrap='wrap' spacing={1}>
-                        {charactersElements}
-                    </Grid>}
+            {isLoading
+                ? <Preloader/>
+                : <Grid container alignContent='stretch' justify='space-between' wrap='wrap' spacing={1}>
+                    {charactersElements}
+                </Grid>}
         </>
-
     )
 };
 

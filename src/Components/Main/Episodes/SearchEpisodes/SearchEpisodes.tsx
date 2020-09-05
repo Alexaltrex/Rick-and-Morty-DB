@@ -1,9 +1,18 @@
 import React from 'react';
 import {Button, Typography} from "@material-ui/core";
-import {reduxForm, Field} from 'redux-form'
+import {reduxForm, Field, InjectedFormProps} from 'redux-form'
 import {makeStyles} from "@material-ui/core/styles";
 import SearchIcon from '@material-ui/icons/Search';
 import RenderTextField from "../../../Common/RenderTextField/RenderTextField";
+import {GetStringKeysType} from "../../../../Types/Types";
+import {SearchCharactersPropsType} from "../../Characters/SearchCharacters/SearchCharactersContainer";
+import {SearchEpisodesPropsType} from "./SearchEpisodesContainer";
+import {
+    empty,
+    SearchCharactersFormValuesType,
+    SearchEpisodesErrorsType,
+    SearchEpisodesValidateType
+} from "../../../../Helpers/Validators";
 
 const useStyles = makeStyles({
     field: {
@@ -17,7 +26,7 @@ const useStyles = makeStyles({
 });
 
 //////////////////////////////////////////////////////////////////////////////////
-const SearchEpisodesForm = (props) => {
+const SearchEpisodesForm: React.FC<InjectedFormProps<SearchEpisodesFormValuesType, SearchEpisodesFormOwnPropsType> & SearchEpisodesFormOwnPropsType> = (props) => {
     const classes = useStyles();
     const {handleSubmit, submitting, pristine, reset, error} = props
     return (
@@ -52,9 +61,8 @@ const SearchEpisodesForm = (props) => {
     )
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-const validate = (values) => {
-    const empty = (str) => /^\s+$/.test(str)
-    let errors = {};
+const validate: SearchEpisodesValidateType = (values) => {
+    let errors = {} as SearchEpisodesErrorsType;
     if (empty(values.name) && values.name !== '') {
         errors.name = 'name field is empty'
     }
@@ -68,25 +76,28 @@ const validate = (values) => {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-const ReduxSearchEpisodesForm = reduxForm({
+const ReduxSearchEpisodesForm = reduxForm<SearchEpisodesFormValuesType, SearchEpisodesFormOwnPropsType>({
     form: 'searchEpisodes',
     validate
 })(SearchEpisodesForm);
 
-const SearchEpisodes = (props) => {
-    const {setShowEpisodesFromSearch, setSearchingParams, setCurrentPage} = props;
-    const onSubmit = (formValue) => {
-        // if (в форму введены валидные данный) {
-        // setSearchingParams(formValue)
-        // setShowCharactersFromSearch(true);
-        // }
-        console.log(formValue);
+const SearchEpisodes: React.FC<SearchEpisodesPropsType> = (props) => {
+    const {setShowEpisodesFrom, setSearchingParams} = props;
+    const onSubmit = (formValue: SearchEpisodesFormValuesType) => {
         setSearchingParams(formValue);
-        setShowEpisodesFromSearch(true);
+        setShowEpisodesFrom('search');
     }
     return (
         <ReduxSearchEpisodesForm onSubmit={onSubmit}/>
     )
 };
 
-export default SearchEpisodes
+export default SearchEpisodes;
+
+type SearchEpisodesFormValuesType = {
+    name: string
+    episode: string
+}
+
+type SearchEpisodesFormKeysType = GetStringKeysType<SearchEpisodesFormValuesType>;
+type SearchEpisodesFormOwnPropsType = {}

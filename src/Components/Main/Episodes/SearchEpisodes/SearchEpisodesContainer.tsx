@@ -8,25 +8,20 @@ const mapStateToProps = (state: StateType): MapStatePropsType => ({
 
 });
 
-const setShowEpisodesFromSearch = episodesAC.setShowEpisodesFromSearch;
+const setShowEpisodesFrom = episodesAC.setShowEpisodesFrom;
 const setSearchingParams = episodesAC.setSearchingParams;
 
 const SearchEpisodesContainer = connect<MapStatePropsType,
-    MapDispatchPropsType,
-    OwnPropsType,
-    StateType>(mapStateToProps, {setShowEpisodesFromSearch, setSearchingParams})(SearchEpisodes);
+    MapDispatchPropsType, {}, StateType>(mapStateToProps,
+    {setShowEpisodesFrom, setSearchingParams})(SearchEpisodes);
 
-type MapStatePropsType = {
-
-}
+type MapStatePropsType = {}
 
 type MapDispatchPropsType = {
-    setShowEpisodesFromSearch: (showEpisodesFromSearch: boolean) => void
+    setShowEpisodesFrom: (showEpisodesFrom: 'all' | 'search') => void
     setSearchingParams: (searchingParams: SearchingEpisodesParamsType) => void
    }
 
-type OwnPropsType = {
-
-}
+export type SearchEpisodesPropsType = MapStatePropsType & MapDispatchPropsType;
 
 export default SearchEpisodesContainer;

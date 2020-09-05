@@ -1,3 +1,6 @@
+import {GetActionsType} from "./store";
+import {charactersAC} from "./characters-reducer";
+
 const SET_CURRENT_ITEM = 'SIDEBAR/SET_CURRENT_ITEM';
 
 let initialState = {
@@ -5,8 +8,9 @@ let initialState = {
 }
 
 export type initialStateType = typeof initialState;
+type CharactersActionsType = GetActionsType<typeof sidebarAC>
 
-const sidebarReducer = (state = initialState, action: any):initialStateType => {
+const sidebarReducer = (state = initialState, action: CharactersActionsType):initialStateType => {
     switch (action.type) {
         case SET_CURRENT_ITEM: {
             return {...state, currentItem: action.currentItem}
@@ -16,11 +20,9 @@ const sidebarReducer = (state = initialState, action: any):initialStateType => {
     }
 }
 
-type setCurrentItemType = {
-    type: typeof SET_CURRENT_ITEM
-    currentItem: number
+export const sidebarAC = {
+    setCurrentSidebarMenuItem: (currentItem: number) => ({type: SET_CURRENT_ITEM, currentItem} as const)
 }
 
-export const setCurrentItem = (currentItem: number): setCurrentItemType => ({type: SET_CURRENT_ITEM, currentItem});
 
 export default sidebarReducer;

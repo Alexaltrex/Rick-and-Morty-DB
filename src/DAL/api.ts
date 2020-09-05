@@ -3,8 +3,8 @@ import {
     CharactersDataType,
     CharacterType,
     EpisodesDataType,
-    EpisodeType,
-    SearchingCharactersParamsType, SearchingEpisodesParamsType,
+    EpisodeType, LocationsDataType, LocationType,
+    SearchingCharactersParamsType, SearchingEpisodesParamsType, SearchingLocationsParamsType,
 
 } from "../Types/Types";
 
@@ -35,7 +35,6 @@ export const charactersAPI = {
         if (searchingParams.type) str = `${str}&type=${searchingParams.type}`;
         str = `${str}&page=${currentPage}`
         let response = await instance.get<CharactersDataType>(`character/?${str}`);
-        console.log(response)
         return response.data
     }
 };
@@ -59,9 +58,31 @@ export const episodesAPI = {
         if (searchingParams.episode) str = `${str}&episode=${searchingParams.episode}`;
         str = `${str}&page=${currentPage}`
         let response = await instance.get<EpisodesDataType>(`episode/?${str}`);
-        console.log(str)
-        console.log(response.data)
         return response.data
 
+    }
+};
+
+export const locationsAPI = {
+    async getLocations(currentPage = 1) {
+        let response = await instance.get<LocationsDataType>(`location/?page=${currentPage}`);
+        return response.data
+    },
+    async getCurrentLocation(id: number) {
+        let response = await instance.get<LocationType>(`location/${id}`);
+        return response.data
+    },
+    async getLocationByUrl(url: string) {
+        let response = await axios.get<LocationType>(url);
+        return response.data
+    },
+    async searchLocations(searchingParams: SearchingLocationsParamsType, currentPage = 1) {
+        let str = '';
+        if (searchingParams.name) str = `${str}name=${searchingParams.name}`;
+        if (searchingParams.type) str = `${str}&episode=${searchingParams.type}`;
+        if (searchingParams.dimension) str = `${str}&episode=${searchingParams.dimension}`;
+        str = `${str}&page=${currentPage}`;
+        let response = await instance.get<LocationsDataType>(`location/?${str}`);
+        return response.data
     }
 };
