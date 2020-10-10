@@ -36,6 +36,18 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 2. Блок информации об эпизодеи: код, название, дата выхода.
 3. Количество и список персонажей (изображение и имя), кто учавствовал в эпизоде. Каждый элмемент списка является ссылкой на страницу персонажа.
 
+## Разработка
+Интерфейс разработан на базе библиотеки React v.16.13.1
+Глобальное состояние: управление - Redux v.4.0.5, доступ - React-redux v.7.2.1
+Локальное состояние: hook "useState"
+Побочные эффекты: hook "useEffect"
+Роутинг: React-router-dom v.5.2.0
+Асинфронный код: Redux-thunk v.2.3.0,
+Сетевые запросы: Axios v.0.19.2
+Работа с формами: Redux-form v.8.3.6
+Дизайн: Material-UI v.4.11.0
+Типизация - Typescript v.3.7.2
+
 ## Available Scripts
 
 In the project directory, you can run:
