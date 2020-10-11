@@ -5,7 +5,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 
 
 
-const RenderSelectField = ({
+const renderSelectField = ({
                                input,
                                label,
                                meta: {touched, error},
@@ -33,4 +33,4 @@ const RenderSelectField = ({
     )
 };
 
-export default RenderSelectField;
+export default renderSelectField;

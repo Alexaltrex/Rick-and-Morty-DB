@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {
     Avatar, Badge, Button,
-    CircularProgress, Grid,
+    Grid,
     Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
@@ -12,34 +12,8 @@ import RoomIcon from '@material-ui/icons/Room';
 import PeopleIcon from '@material-ui/icons/People';
 import {LocationInfoPropsType} from "./LocationInfoContainer";
 import {CharactersDataType, CharacterType, PathParamsType} from "../../../../Types/Types";
-import Preloader from "../../../Common/Preloader/Preloader";
-import RowCustom from "../../../Common/RowCustom/RowCustom";
-
-const useStyles = makeStyles({
-    characterItem: {
-        borderRadius: 28,
-        padding: 2,
-        paddingRight: 10,
-        margin: 2,
-        marginBottom: 4,
-        textTransform: 'none'
-    },
-    buttons: {
-        marginTop: 5,
-        marginBottom: 20
-    },
-    button: {
-        textTransform: 'none',
-    },
-    avatar: {
-        marginRight: 5
-    },
-    titleOfList: {
-        padding: 10
-    }
-});
-
-type PropsType = LocationInfoPropsType & RouteComponentProps<PathParamsType>;
+import Preloader from "../../../Common/Preloader";
+import RowCustom from "../../../Common/RowCustom";
 
 const LocationInfo: React.FC<PropsType> = (props) => {
     const {
@@ -88,7 +62,7 @@ const LocationInfo: React.FC<PropsType> = (props) => {
                 pages: 1,
                 prev: null,
                 next: null
-            }
+            };
             setCharacters(charactersOfCurrentLocationData)
         }
 
@@ -205,3 +179,31 @@ const LocationInfo: React.FC<PropsType> = (props) => {
 };
 
 export default LocationInfo;
+
+//======================= TYPES ===========================
+type PropsType = LocationInfoPropsType & RouteComponentProps<PathParamsType>;
+
+//======================= STYLES ==========================
+const useStyles = makeStyles({
+    characterItem: {
+        borderRadius: 28,
+        padding: 2,
+        paddingRight: 10,
+        margin: 2,
+        marginBottom: 4,
+        textTransform: 'none'
+    },
+    buttons: {
+        marginTop: 5,
+        marginBottom: 20
+    },
+    button: {
+        textTransform: 'none',
+    },
+    avatar: {
+        marginRight: 5
+    },
+    titleOfList: {
+        padding: 10
+    }
+});

@@ -25,7 +25,4 @@ type MapDispatchPropsType = {
 
 export type SearchCharactersPropsType = MapStatePropsType & MapDispatchPropsType;
 
-
-
-
 export default SearchCharactersContainer;

@@ -1,11 +1,9 @@
-import * as React from "react";
+import React from "react";
 import {useEffect} from "react";
 import {
     Badge,
     Button,
-    Card, CardContent,
-    CardMedia,
-    CircularProgress,
+    Card, CardMedia,
     Grid, List, ListItem,
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
@@ -20,61 +18,8 @@ import ListItemText from "@material-ui/core/ListItemText/ListItemText";
 import {Redirect} from "react-router-dom";
 import MovieIcon from '@material-ui/icons/Movie';
 import {CharactersInfoPropsType} from "./CharacterInfoContainer";
-import RowCustom from "../../../Common/RowCustom/RowCustom";
-import Preloader from "../../../Common/Preloader/Preloader";
-
-const useStyles = makeStyles({
-    button: {
-        textTransform: 'none',
-        marginBottom: 10
-    },
-    card: {
-        width: 300,
-        borderRadius: 5,
-        boxShadow: '5px 5px 5px 0px rgba(0, 0, 0, .5)',
-        marginBottom: 10,
-        marginRight: 20
-    },
-    cardContainer: {
-        display: 'flex',
-        justifyContent: 'center'
-    },
-    media: {
-        height: 300,
-    },
-    paper: {
-        width: 300,
-    },
-    episode: {
-        '&:nth-of-type(odd)': {
-            backgroundColor: '#ccc',
-        },
-    },
-    titleOfList: {
-        padding: 10
-    },
-    name: {
-        textAlign: 'center',
-        paddingTop: 5,
-        paddingBottom: 5
-    },
-    characterInfoBlock: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        alignItems: 'flex-start'
-    },
-    characterInfo: {
-        flexGrow: 1
-    }
-});
-
-type ListItemLinkPropsType = {
-    icon?: React.ReactElement
-    primary: string
-    to: string
-    onClick: () => void
-    children: any
-}
+import RowCustom from "../../../Common/RowCustom";
+import Preloader from "../../../Common/Preloader";
 
 const ListItemLink: React.FC<ListItemLinkPropsType> = (props) => {
     const classes = useStyles()
@@ -97,9 +42,6 @@ const ListItemLink: React.FC<ListItemLinkPropsType> = (props) => {
         </li>
     );
 }
-
-
-type PropsType = CharactersInfoPropsType & RouteComponentProps<PathParamsType>;
 
 const CharacterInfo: React.FC<PropsType> = (props) => {
     const {
@@ -264,3 +206,59 @@ const CharacterInfo: React.FC<PropsType> = (props) => {
 };
 
 export default CharacterInfo;
+
+//=================== TYPES =====================
+type ListItemLinkPropsType = {
+    icon?: React.ReactElement
+    primary: string
+    to: string
+    onClick: () => void
+    children: any
+};
+type PropsType = CharactersInfoPropsType & RouteComponentProps<PathParamsType>;
+
+//=================== STYLES ====================
+const useStyles = makeStyles({
+    button: {
+        textTransform: 'none',
+        marginBottom: 10
+    },
+    card: {
+        width: 300,
+        borderRadius: 5,
+        boxShadow: '5px 5px 5px 0px rgba(0, 0, 0, .5)',
+        marginBottom: 10,
+        marginRight: 20
+    },
+    cardContainer: {
+        display: 'flex',
+        justifyContent: 'center'
+    },
+    media: {
+        height: 300,
+    },
+    paper: {
+        width: 300,
+    },
+    episode: {
+        '&:nth-of-type(odd)': {
+            backgroundColor: '#ccc',
+        },
+    },
+    titleOfList: {
+        padding: 10
+    },
+    name: {
+        textAlign: 'center',
+        paddingTop: 5,
+        paddingBottom: 5
+    },
+    characterInfoBlock: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'flex-start'
+    },
+    characterInfo: {
+        flexGrow: 1
+    }
+});

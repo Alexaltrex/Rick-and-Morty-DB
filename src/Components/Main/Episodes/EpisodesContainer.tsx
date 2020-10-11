@@ -1,10 +1,8 @@
 import {connect} from "react-redux";
 import {StateType} from "../../../store/store";
-import React from "react";
 import {CharacterType, EpisodeType, SearchingEpisodesParamsType} from "../../../Types/Types";
 import Episodes from "./Episodes";
 import {episodesAC, getEpisodes, getEpisodesFromSearch} from "../../../store/episodes-reducer";
-import {charactersAC} from "../../../store/characters-reducer";
 
 type MapStatePropsType = {
     episodes: Array<EpisodeType>

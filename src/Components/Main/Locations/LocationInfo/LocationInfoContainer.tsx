@@ -2,7 +2,7 @@ import {compose} from "redux";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import {StateType} from "../../../../store/store";
-import {CharactersDataType, CharacterType, LocationsDataType, LocationType} from "../../../../Types/Types";
+import {CharactersDataType, CharacterType, LocationType} from "../../../../Types/Types";
 import {getAroundId, getCurrentLocation, locationsAC} from "../../../../store/locations-reducer";
 import LocationInfo from "./LocationInfo";
 import {sidebarAC} from "../../../../store/sidebar-reducer";

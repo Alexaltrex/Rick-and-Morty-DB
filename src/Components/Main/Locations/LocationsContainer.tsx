@@ -1,10 +1,8 @@
 import {connect} from "react-redux";
 import {StateType} from "../../../store/store";
-import React from "react";
 import {LocationType, SearchingLocationsParamsType} from "../../../Types/Types";
 import {getLocations, getLocationsFromSearch, locationsAC} from "../../../store/locations-reducer";
 import Locations from "./Locations";
-import {charactersAC} from "../../../store/characters-reducer";
 
 export type MapStatePropsType = {
     locations: Array<LocationType>

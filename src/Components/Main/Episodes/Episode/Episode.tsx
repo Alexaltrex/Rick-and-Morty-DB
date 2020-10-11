@@ -7,29 +7,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Typography from "@material-ui/core/Typography";
 import ListItemText from "@material-ui/core/ListItemText";
 
-type PropsType = {
-    episode: EpisodeType
-}
-
-const onClick = () => {
-
-};
-
-const useStyles = makeStyles({
-    item: {
-        '&:nth-of-type(odd)': {
-            backgroundColor: '#eee',
-        },
-    }
-});
-
-interface ListItemLinkProps {
-    icon?: React.ReactElement;
-    primary: string;
-    to: string;
-}
-
-function ListItemLink(props: any) {
+function ListItemLink(props: ListItemLinkPropsType) {
     const classes = useStyles();
     const {icon, primary, to} = props;
     const renderLink = React.useMemo(
@@ -52,7 +30,6 @@ function ListItemLink(props: any) {
 }
 
 const Episode = (props: PropsType) => {
-    const classes = useStyles();
     const {episode} = props;
     return (
         <ListItemLink
@@ -63,3 +40,23 @@ const Episode = (props: PropsType) => {
 };
 
 export default Episode;
+
+//====================== TYPE =========================
+type ListItemLinkPropsType = {
+    icon?: React.ReactElement;
+    primary: string;
+    to: string;
+    children: any
+}
+type PropsType = {
+    episode: EpisodeType
+}
+
+//===================== STYLES ========================
+const useStyles = makeStyles({
+    item: {
+        '&:nth-of-type(odd)': {
+            backgroundColor: '#eee',
+        },
+    }
+});

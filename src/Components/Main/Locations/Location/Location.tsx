@@ -7,26 +7,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Typography from "@material-ui/core/Typography";
 import ListItemText from "@material-ui/core/ListItemText";
 
-type PropsType = {
-    location: LocationType
-    setCurrentLocationId: (id: number | null) => void
-}
-
-const useStyles = makeStyles({
-    item: {
-        '&:nth-of-type(odd)': {
-            backgroundColor: '#eee',
-        },
-    }
-});
-
-interface ListItemLinkProps {
-    icon?: React.ReactElement;
-    primary: string;
-    to: string;
-}
-
-function ListItemLink(props: any) {
+const ListItemLink: React.FC<ListItemLinkProps> = (props) => {
     const classes = useStyles();
     const {icon, primary, to, onClick} = props;
     const renderLink = React.useMemo(
@@ -50,7 +31,6 @@ function ListItemLink(props: any) {
 
 const Location: React.FC<PropsType> = (props) => {
     const {location, setCurrentLocationId} = props;
-    const classes = useStyles();
     const onClick = () => {
         setCurrentLocationId(location.id)
     };
@@ -64,3 +44,25 @@ const Location: React.FC<PropsType> = (props) => {
 };
 
 export default Location;
+
+//============== TYPES ===============
+type ListItemLinkProps = {
+    icon?: React.ReactElement;
+    primary: string;
+    to: string;
+    children: any
+    onClick: () => void
+}
+type PropsType = {
+    location: LocationType
+    setCurrentLocationId: (id: number | null) => void
+};
+
+//================== STYLES ==================
+const useStyles = makeStyles({
+    item: {
+        '&:nth-of-type(odd)': {
+            backgroundColor: '#eee',
+        },
+    }
+});

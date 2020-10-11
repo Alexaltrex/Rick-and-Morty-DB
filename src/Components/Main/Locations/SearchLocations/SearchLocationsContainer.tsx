@@ -7,7 +7,6 @@ import {SearchingLocationsParamsType} from "../../../../Types/Types";
 const mapStateToProps = (state: StateType): MapStatePropsType => ({});
 
 const setSearchingParams = locationsAC.setSearchingParams;
-//const setCurrentPage = charactersAC.setCurrentPage;
 const setShowLocationsFrom = locationsAC.setShowLocationsFrom;
 
 
@@ -19,7 +18,6 @@ type MapStatePropsType = {}
 
 type MapDispatchPropsType = {
     setSearchingParams: (searchingParams: SearchingLocationsParamsType) => void
-    //setCurrentPage: (currentPage: number) => void
     setShowLocationsFrom: (showLocationsFrom: 'all' | 'search') => void
 }
 

@@ -1,5 +1,4 @@
 import {GetActionsType} from "./store";
-import {charactersAC} from "./characters-reducer";
 
 const SET_CURRENT_ITEM = 'SIDEBAR/SET_CURRENT_ITEM';
 

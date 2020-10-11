@@ -29,8 +29,6 @@ type MapDispatchPropsType = {
 
 export type CharactersInfoPropsType = MapStatePropsType & MapDispatchPropsType
 
-// currentCharacterId,setCurrentCharacterId, setStartGettingAroundId, startGettingAroundId,idChange, idForSearch, setCurrentCharacter,
-
 const mapStateToProps = (state: StateType): MapStatePropsType => ({
     isLoading: state.app.isLoading,
     lanError: state.app.lanError,

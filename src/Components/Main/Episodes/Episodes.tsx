@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {EpisodeType, SearchingEpisodesParamsType} from "../../../Types/Types";
 import Episode from "./Episode/Episode";
 import {Badge, CircularProgress, Collapse, List} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -9,21 +8,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import SearchEpisodesContainer from "./SearchEpisodes/SearchEpisodesContainer";
 import {EpisodesPropsType} from "./EpisodesContainer";
 import MovieIcon from '@material-ui/icons/Movie';
-
-const useStyles = makeStyles({
-    button: {
-        marginRight: 10,
-        textTransform: 'none'
-    },
-    count: {
-        marginTop: 20,
-        marginBottom: 20
-    },
-    circular: {
-        display: 'flex',
-        justifyContent: 'center'
-    }
-});
 
 const Episodes: React.FC<EpisodesPropsType> = (props) => {
     const {
@@ -43,7 +27,7 @@ const Episodes: React.FC<EpisodesPropsType> = (props) => {
 
     const onShowAllClick = () => {
         setShowEpisodesFrom('all')
-    }
+    };
 
     useEffect(() => {
         if (showEpisodesFrom === 'all') {
@@ -52,7 +36,6 @@ const Episodes: React.FC<EpisodesPropsType> = (props) => {
         if (showEpisodesFrom === 'search') {
             getEpisodesFromSearch(searchingParams);
         }
-
     }, [searchingParams.name, searchingParams.episode, showEpisodesFrom]);
 
     return (
@@ -104,3 +87,19 @@ const Episodes: React.FC<EpisodesPropsType> = (props) => {
 };
 
 export default Episodes;
+
+//============================= STYLES ======================
+const useStyles = makeStyles({
+    button: {
+        marginRight: 10,
+        textTransform: 'none'
+    },
+    count: {
+        marginTop: 20,
+        marginBottom: 20
+    },
+    circular: {
+        display: 'flex',
+        justifyContent: 'center'
+    }
+});

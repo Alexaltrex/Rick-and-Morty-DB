@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from "react";
 import Character from "./Character/Character";
-import Paginator from "../../Common/Paginator/Paginator";
+import Paginator from "../../Common/Paginator";
 import {
     Badge,
-    CircularProgress,
     Collapse,
     Dialog,
     DialogActions,
@@ -18,18 +17,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {makeStyles} from "@material-ui/core/styles";
 import PeopleIcon from '@material-ui/icons/People';
 import {CharactersPropsType} from "./CharactersContainer";
-import Preloader from "../../Common/Preloader/Preloader";
-
-const useStyles = makeStyles({
-    button: {
-        marginRight: 10,
-        textTransform: 'none'
-    },
-    count: {
-        marginTop: 20,
-        marginBottom: 20
-    },
-});
+import Preloader from "../../Common/Preloader";
 
 const Characters: React.FC<CharactersPropsType> = (props) => {
     const {
@@ -68,7 +56,7 @@ const Characters: React.FC<CharactersPropsType> = (props) => {
     const onShowAllClick = () => {
         setShowCharactersFrom('all')
         setCurrentPage(1);
-    }
+    };
 
     const [open, setOpen] = React.useState(false);
 
@@ -157,3 +145,15 @@ const Characters: React.FC<CharactersPropsType> = (props) => {
 };
 
 export default Characters;
+
+//=================== STYLES ==========================
+const useStyles = makeStyles({
+    button: {
+        marginRight: 10,
+        textTransform: 'none'
+    },
+    count: {
+        marginTop: 20,
+        marginBottom: 10
+    },
+});

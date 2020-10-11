@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {CharactersDataType, CharacterType, PathParamsType} from "../../../../Types/Types";
 import {
     Avatar, Badge, Button,
-    CircularProgress, Grid,
+    Grid,
     Typography
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
@@ -12,28 +12,7 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import MovieIcon from '@material-ui/icons/Movie';
 import PeopleIcon from '@material-ui/icons/People';
 import {EpisodeInfoPropsType} from "./EpisodeInfoContainer";
-import Preloader from "../../../Common/Preloader/Preloader";
-
-const useStyles = makeStyles({
-    characterItem: {
-        borderRadius: 28,
-        padding: 2,
-        paddingRight: 10,
-        margin: 2,
-        marginBottom: 4,
-        textTransform: 'none'
-    },
-    buttons: {
-        marginTop: 5,
-        marginBottom: 20
-    },
-    button: {
-        textTransform: 'none',
-    },
-    avatar: {
-        marginRight: 5
-    }
-});
+import Preloader from "../../../Common/Preloader";
 
 type PropsType = EpisodeInfoPropsType & RouteComponentProps<PathParamsType>;
 
@@ -197,3 +176,25 @@ const EpisodeInfo: React.FC<PropsType> = (props) => {
 };
 
 export default EpisodeInfo;
+
+//=========================== STYLES ============================
+const useStyles = makeStyles({
+    characterItem: {
+        borderRadius: 28,
+        padding: 2,
+        paddingRight: 10,
+        margin: 2,
+        marginBottom: 4,
+        textTransform: 'none'
+    },
+    buttons: {
+        marginTop: 5,
+        marginBottom: 20
+    },
+    button: {
+        textTransform: 'none',
+    },
+    avatar: {
+        marginRight: 5
+    }
+});

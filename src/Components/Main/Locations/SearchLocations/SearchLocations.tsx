@@ -3,11 +3,7 @@ import {Button, Typography} from "@material-ui/core";
 import {reduxForm, Field, InjectedFormProps} from 'redux-form'
 import {makeStyles} from "@material-ui/core/styles";
 import SearchIcon from '@material-ui/icons/Search';
-import RenderTextField from "../../../Common/RenderTextField/RenderTextField";
-import {GetStringKeysType} from "../../../../Types/Types";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
-import Select from "@material-ui/core/Select/Select";
+import RenderTextField from "../../../Common/RenderTextField";
 import {
     empty,
     SearchLocationsErrorsType,
@@ -16,46 +12,7 @@ import {
 } from "../../../../Helpers/Validators";
 import {SearchLocationsPropsType} from "./SearchLocationsContainer";
 
-const useStyles = makeStyles({
-    field: {
-        marginRight: 10,
-        marginBottom: 10,
-    },
-    button: {
-        textTransform: 'none',
-        marginRight: 10
-    }
-});
-
-type PropsType = {
-    input: any
-    label: string
-    meta: { touched: boolean, error: boolean }
-    children: any
-}
-
-const RenderSelectField: React.FC<PropsType> = (props) => {
-    const {input, label, meta: {touched, error}, children, ...custom} = props;
-    return (
-        <FormControl>
-            <InputLabel htmlFor={label}>{label}</InputLabel>
-            <Select
-                native
-                {...input}
-                {...custom}
-                inputProps={{
-                    name: label,
-                    id: label
-                }}
-            >
-                {children}
-            </Select>
-        </FormControl>
-    )
-};
-
-
-//////////////////////////////////////////////////////////////////////////////////
+//===============================FORM =====================================
 const SearchLocationsForm: React.FC<InjectedFormProps<SearchLocationsFormValuesType, SearchLocationsFormOwnPropsType> & SearchLocationsFormOwnPropsType> = (props) => {
     const classes = useStyles();
     const {handleSubmit, submitting, pristine, reset, error} = props;
@@ -93,7 +50,7 @@ const SearchLocationsForm: React.FC<InjectedFormProps<SearchLocationsFormValuesT
     )
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+//========================== VALIDATE ============================
 const validate: SearchLocationsValidateType = (values) => {
     let errors = {} as SearchLocationsErrorsType;
     if (empty(values.name) && (values.name !== '')) {
@@ -113,14 +70,15 @@ const validate: SearchLocationsValidateType = (values) => {
         errors._error = 'At least one member must be entered';
     }
     return errors;
-}
+};
 
-////////////////////////////////////////////////////////////////////////////////////////////
+//=========================== REDUX-FORM ======================================
 const ReduxSearchLocationsForm = reduxForm<SearchLocationsFormValuesType, SearchLocationsFormOwnPropsType>({
     form: 'searchLocations',
     validate
 })(SearchLocationsForm);
 
+//=========================== COMPONENT ======================================
 const SearchLocations: React.FC<SearchLocationsPropsType> = (props) => {
     const {setSearchingParams, setShowLocationsFrom} = props;
 
@@ -135,8 +93,19 @@ const SearchLocations: React.FC<SearchLocationsPropsType> = (props) => {
 
 export default SearchLocations;
 
-///////////////////////////////////////////////////////////////////////////////////////////
-type SearchLocationsFormKeysType = GetStringKeysType<SearchLocationsFormValuesType>;
+//=========================== TYPES ==============================
 type SearchLocationsFormOwnPropsType = {}
+
+//========================== STYLES ===============================
+const useStyles = makeStyles({
+    field: {
+        marginRight: 10,
+        marginBottom: 10,
+    },
+    button: {
+        textTransform: 'none',
+        marginRight: 10
+    }
+});
 
 

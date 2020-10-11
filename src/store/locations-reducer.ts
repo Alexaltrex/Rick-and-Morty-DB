@@ -1,5 +1,4 @@
 import {
-    CharactersDataType,
     CharacterType,
     LocationsDataType,
     LocationType,
@@ -9,7 +8,6 @@ import {GetActionsType, StateType} from "./store";
 import {ThunkAction} from "redux-thunk";
 import {appAC, AppActionsType} from "./app-reducer";
 import {charactersAPI, locationsAPI} from "../DAL/api";
-import {charactersAC} from "./characters-reducer";
 
 const initialState = {
     locations: [] as Array<LocationType>,

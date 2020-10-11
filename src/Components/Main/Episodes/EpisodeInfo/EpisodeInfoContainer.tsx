@@ -25,7 +25,6 @@ type MapDispatchPropsType = {
     setCharacters: (charactersData: CharactersDataType) => void
     getAroundId: (targetId: number, change: null | 'prev' | 'next') => void
     setShowEpisodesFrom: (showEpisodesFrom: 'all' | 'search') => void
-
 }
 
 const mapStateToProps = (state: StateType): MapStatePropsType => ({

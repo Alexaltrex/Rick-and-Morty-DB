@@ -1,13 +1,8 @@
 import React from 'react';
-import {Button, FormHelperText, Typography} from "@material-ui/core";
+import {Button, Typography} from "@material-ui/core";
 import {reduxForm, Field, InjectedFormProps} from 'redux-form'
 import {makeStyles} from "@material-ui/core/styles";
 import SearchIcon from '@material-ui/icons/Search';
-import RenderTextField from "../../../Common/RenderTextField/RenderTextField";
-import {GetStringKeysType, SearchingCharactersParamsType} from "../../../../Types/Types";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
-import Select from "@material-ui/core/Select/Select";
 import {SearchCharactersPropsType} from "./SearchCharactersContainer";
 import {
     empty,
@@ -15,27 +10,10 @@ import {
     SearchCharactersFormValuesType,
     SearchCharactersValidateType
 } from "../../../../Helpers/Validators";
-import RenderSelectField from "../../../Common/renderSelectField";
+import renderSelectField from "../../../Common/renderSelectField";
+import RenderTextField from "../../../Common/RenderTextField";
 
-const useStyles = makeStyles({
-    textField: {
-        marginRight: 10,
-        marginBottom: 10
-    },
-    selectField: {
-        marginRight: 10,
-        marginTop: 10
-
-    },
-    button: {
-        textTransform: 'none',
-        marginRight: 10,
-        marginTop: 10,
-        marginBottom: 10
-    }
-});
-
-//////////////////////////////////////////////////////////////////////////////////
+//================================= FORM ===================================
 const SearchCharactersForm: React.FC<InjectedFormProps<SearchCharactersFormValuesType, SearchCharactersFormOwnPropsType> & SearchCharactersFormOwnPropsType> = (props) => {
     const classes = useStyles();
     const {handleSubmit, submitting, pristine, reset, error} = props;
@@ -51,13 +29,13 @@ const SearchCharactersForm: React.FC<InjectedFormProps<SearchCharactersFormValue
             </div>
 
             <div>
-                <Field name='status' component={RenderSelectField} label='Status' className={classes.selectField}>
+                <Field name='status' component={renderSelectField} label='Status' className={classes.selectField}>
                     <option value={''}/>
                     <option value={'alive'}>Alive</option>
                     <option value={'dead'}>Dead</option>
                     <option value={'unknown'}>Unknown</option>
                 </Field>
-                <Field name='gender' component={RenderSelectField} label='Gender' className={classes.selectField}>
+                <Field name='gender' component={renderSelectField} label='Gender' className={classes.selectField}>
                     <option value={''}></option>
                     <option value={'female'}>Female</option>
                     <option value={'male'}>Male</option>
@@ -87,7 +65,7 @@ const SearchCharactersForm: React.FC<InjectedFormProps<SearchCharactersFormValue
     )
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+//===================== VALIDATE =============================
 const validate: SearchCharactersValidateType = (values) => {
     let errors = {} as SearchCharactersErrorsType;
     if (empty(values.name) && (values.name !== '')) {
@@ -111,22 +89,20 @@ const validate: SearchCharactersValidateType = (values) => {
     return errors;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
+//============================ REDUX-FORM ====================================
 const ReduxSearchCharactersForm = reduxForm<SearchCharactersFormValuesType, SearchCharactersFormOwnPropsType>({
     form: 'searchCharacters',
     validate
 })(SearchCharactersForm);
 
+//=========================== COMPONENT =====================================
 const SearchCharacters: React.FC<SearchCharactersPropsType> = (props) => {
     const {setSearchingParams, setCurrentPage, setShowCharactersFrom} = props;
 
     const onSubmit = (formValue: SearchCharactersFormValuesType) => {
-
-        console.log(formValue)
         setCurrentPage(1)
         setSearchingParams(formValue)
         setShowCharactersFrom('search')
-
     };
     return (
         <ReduxSearchCharactersForm onSubmit={onSubmit}/>
@@ -136,7 +112,27 @@ const SearchCharacters: React.FC<SearchCharactersPropsType> = (props) => {
 export default SearchCharacters;
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-type SearchCharactersFormKeysType = GetStringKeysType<SearchCharactersFormValuesType>;
+
+//======================== TYPES ==========================
 type SearchCharactersFormOwnPropsType = {}
+
+//====================== STYLES ============================
+const useStyles = makeStyles({
+    textField: {
+        marginRight: 10,
+        marginBottom: 10
+    },
+    selectField: {
+        marginRight: 10,
+        marginTop: 10
+
+    },
+    button: {
+        textTransform: 'none',
+        marginRight: 10,
+        marginTop: 10,
+        marginBottom: 10
+    }
+});
 
 

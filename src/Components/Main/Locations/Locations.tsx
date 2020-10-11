@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Badge, Breadcrumbs, ButtonGroup, CircularProgress, Collapse, IconButton, Link, List} from "@material-ui/core";
+import {Badge, CircularProgress, Collapse, List} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -8,32 +8,6 @@ import Location from './Location/Location'
 import {LocationsPropsType} from "./LocationsContainer";
 import RoomIcon from '@material-ui/icons/Room';
 import SearchLocationsContainer from "./SearchLocations/SearchLocationsContainer";
-
-const useStyles = makeStyles({
-    button: {
-        marginRight: 10,
-        textTransform: 'none'
-    },
-    count: {
-        marginTop: 20,
-        marginBottom: 20
-    },
-    alphabetButton: {
-        minWidth: 30,
-        width: 30,
-        height: 30,
-        padding: 0,
-        borderRadius: 15,
-        textTransform: 'none'
-    },
-    circular: {
-        display: 'flex',
-        justifyContent: 'center'
-    },
-    selected: {
-        backgroundColor: '#ccc'
-    }
-});
 
 const Locations: React.FC<LocationsPropsType> = (props) => {
     const {
@@ -104,7 +78,7 @@ const Locations: React.FC<LocationsPropsType> = (props) => {
         }
 
     }, [searchingParams.name, searchingParams.type, searchingParams.dimension, showLocationsFrom]);
-
+    //
     return (
         <>
             <div>
@@ -155,3 +129,30 @@ const Locations: React.FC<LocationsPropsType> = (props) => {
 };
 
 export default Locations;
+
+//=============================== STYLES ========================
+const useStyles = makeStyles({
+    button: {
+        marginRight: 10,
+        textTransform: 'none'
+    },
+    count: {
+        marginTop: 20,
+        marginBottom: 20
+    },
+    alphabetButton: {
+        minWidth: 30,
+        width: 30,
+        height: 30,
+        padding: 0,
+        borderRadius: 15,
+        textTransform: 'none'
+    },
+    circular: {
+        display: 'flex',
+        justifyContent: 'center'
+    },
+    selected: {
+        backgroundColor: '#ccc'
+    }
+});

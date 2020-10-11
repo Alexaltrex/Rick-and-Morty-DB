@@ -1,5 +1,4 @@
 import {
-    CharactersDataType,
     CharacterType,
     EpisodesDataType,
     EpisodeType,
@@ -9,7 +8,6 @@ import {GetActionsType, StateType} from "./store";
 import {ThunkAction} from "redux-thunk";
 import {charactersAPI, episodesAPI} from "../DAL/api";
 import {appAC, AppActionsType} from "./app-reducer";
-import {charactersAC} from "./characters-reducer";
 
 const initialState = {
     episodes: [] as Array<EpisodeType>,
@@ -193,7 +191,6 @@ export const getAroundId = (targetId: number, change: null | 'prev' | 'next'): T
         } else {
             nextId = null;
         }
-
         dispatch(episodesAC.setAroundId(prevId, nextId));
     } catch
         (e) {

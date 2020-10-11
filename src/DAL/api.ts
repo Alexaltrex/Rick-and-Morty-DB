@@ -9,20 +9,20 @@ import {
 } from "../Types/Types";
 
 const instance = axios.create({
-    baseURL: 'https://rickandmortyapi.com/api/'
-});
+        baseURL: 'https://rickandmortyapi.com/api/'
+    });
 
-export const charactersAPI = {
-    async getCharacters(currentPage = 1) {
-        let response = await instance.get<CharactersDataType>(`character/?page=${currentPage}`);
-        return response.data
-    },
-    async getCharacterByUrl(url: string) {
-        let response = await axios.get<CharacterType>(url);
-        return response.data
-    },
-    async getCurrentCharacter(id: number) {
-        let response = await instance.get<CharacterType>(`character/${id}`);
+    export const charactersAPI = {
+        async getCharacters(currentPage = 1) {
+            let response = await instance.get<CharactersDataType>(`character/?page=${currentPage}`);
+            return response.data
+        },
+        async getCharacterByUrl(url: string) {
+            let response = await axios.get<CharacterType>(url);
+            return response.data
+        },
+        async getCurrentCharacter(id: number) {
+            let response = await instance.get<CharacterType>(`character/${id}`);
         return response.data
     },
 

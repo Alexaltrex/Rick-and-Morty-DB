@@ -18,11 +18,17 @@ type MapDispatchPropsType = {
     setShowLocationsFrom: (showLocationsFrom: 'all' | 'search') => void
 }
 
+export enum OwnIndexEnum {
+    characters = 1,
+    episodes = 2,
+    locations = 3
+}
+
 type OwnPropsType = {
     to: string
     primary: string
     icon?: React.ReactElement
-    ownIndex: number
+    ownIndex: OwnIndexEnum
 }
 
 export type SidebarItemPropsType = MapStatePropsType & MapDispatchPropsType & OwnPropsType

@@ -12,7 +12,6 @@ const initialState = {
     currentCharacter: null as CharacterType | null | undefined,
     next: null as string | null,
     prev: null as string | null,
-    isLoading: false,
     showCharactersFrom: 'all' as 'all' | 'search' | 'episode' | 'location',
     searchingParams: {
         name: '', gender: '', status: '', species: '', type: ''
