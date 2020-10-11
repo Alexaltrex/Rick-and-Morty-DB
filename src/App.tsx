@@ -5,14 +5,6 @@ import MainContainer from "./Components/Main/MainContainer";
 import SidebarContainer from "./Components/Sidebar/SidebarContainer";
 import ErrorBoundary from "./Components/Common/ErrorBoundary";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-        }
-    }),
-);
-
 const App = () => {
     const classes = useStyles();
 
@@ -28,3 +20,12 @@ const App = () => {
 }
 
 export default App;
+
+//=================== STYLE =======================
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            display: 'flex',
+        }
+    }),
+);
