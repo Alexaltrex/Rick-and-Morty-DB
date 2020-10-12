@@ -9,7 +9,7 @@
 ## Запуск проекта:
 Для установки и запуска необходимы установленные программы: Node.js, npm, Git;
 1. Клонирование и запуск: git clone https://github.com/Alexaltrex/Rick-and-Morty-DB.git;
-2. Переход в директорию с проектом: cd react-personal-project;
+2. Переход в директорию с проектом: cd Rick-and-Morty-DB;
 3. Установка зависимостей: npm install;
 4. Запуск проекта в режиме разработки: npm start;
 5. Перейти в браузер и открыть страницу: http://localhost:3000.
