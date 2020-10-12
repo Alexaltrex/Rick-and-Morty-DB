@@ -1,5 +1,6 @@
 # Rick-and-Morty-DB
 Ссылка: https://alexaltrex.github.io/Rick-and-Morty-DB/#/
+![](src/assets/home.jpg)
 
 ## Описание
 Мультимедийная база данных по мультсериалу "Рик и Морти", содержащая информацию по эпизодам, персонажам и локациям.
