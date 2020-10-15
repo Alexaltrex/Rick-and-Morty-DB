@@ -1,4 +1,4 @@
-# Rick-and-Morty-DB
+﻿# Rick-and-Morty-DB
 Ссылка: https://alexaltrex.github.io/Rick-and-Morty-DB/#/
 
 ## Описание
@@ -19,6 +19,7 @@
 * Приложение разработано на базе библиотеки React v.16.13.1 с использованием Create React App (https://github.com/facebook/create-react-app)
 * Приложение разработано на базе API: 'https://rickandmortyapi.com/api/'
 * Глобальное состояние: управление - Redux v.4.0.5, доступ - React-redux v.7.2.1
+* Разделение на глупые и умные (контейнерные) компонетны
 * Локальное состояние: hook "useState"
 * Побочные эффекты: hook "useEffect"
 * Роутинг: React-router-dom v.5.2.0

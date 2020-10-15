@@ -18,7 +18,7 @@ const Header: React.FC<HeaderPropsType> = (props) => {
     const {open, setOpen} = props;
     const classes = useStyles();
 
-    const handleDrawerOpen = () => {
+    const handleDrawerOpen = (): void => {
         setOpen(true);
     };
 

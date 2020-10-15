@@ -86,3 +86,5 @@ export const locationsAPI = {
         return response.data
     }
 };
+
+// @types/jest @types/node @types/react @types/react-dom @types/react-redux @types/react-router-dom @types/redux-form
