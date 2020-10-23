@@ -1,5 +1,5 @@
 ﻿# Rick-and-Morty-DB
-Ссылка: https://alexaltrex.github.io/Rick-and-Morty-DB/#/
+Ссылка: https://alexaltrex.github.io/Rick-and-Morty-DB
 
 <img src="src/assets/home.jpg" width="500">
 
