@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/Rick-and-Morty-DB/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/Rick-and-Morty-DB/static/js/main.02b15a69.chunk.js",
-    "main.js.map": "/Rick-and-Morty-DB/static/js/main.02b15a69.chunk.js.map",
-    "runtime-main.js": "/Rick-and-Morty-DB/static/js/runtime-main.3f5f35c8.js",
-    "runtime-main.js.map": "/Rick-and-Morty-DB/static/js/runtime-main.3f5f35c8.js.map",
-    "static/js/2.47eda909.chunk.js": "/Rick-and-Morty-DB/static/js/2.47eda909.chunk.js",
-    "static/js/2.47eda909.chunk.js.map": "/Rick-and-Morty-DB/static/js/2.47eda909.chunk.js.map",
-    "static/js/3.b948d423.chunk.js": "/Rick-and-Morty-DB/static/js/3.b948d423.chunk.js",
-    "static/js/3.b948d423.chunk.js.map": "/Rick-and-Morty-DB/static/js/3.b948d423.chunk.js.map",
+    "main.js": "/Rick-and-Morty-DB/static/js/main.f81766da.chunk.js",
+    "main.js.map": "/Rick-and-Morty-DB/static/js/main.f81766da.chunk.js.map",
+    "runtime-main.js": "/Rick-and-Morty-DB/static/js/runtime-main.bad992e0.js",
+    "runtime-main.js.map": "/Rick-and-Morty-DB/static/js/runtime-main.bad992e0.js.map",
+    "static/js/2.5f059028.chunk.js": "/Rick-and-Morty-DB/static/js/2.5f059028.chunk.js",
+    "static/js/2.5f059028.chunk.js.map": "/Rick-and-Morty-DB/static/js/2.5f059028.chunk.js.map",
+    "static/js/3.5f6ce756.chunk.js": "/Rick-and-Morty-DB/static/js/3.5f6ce756.chunk.js",
+    "static/js/3.5f6ce756.chunk.js.map": "/Rick-and-Morty-DB/static/js/3.5f6ce756.chunk.js.map",
     "index.html": "/Rick-and-Morty-DB/index.html",
-    "precache-manifest.49a983629b1137abe2e81fd5352b2633.js": "/Rick-and-Morty-DB/precache-manifest.49a983629b1137abe2e81fd5352b2633.js",
+    "precache-manifest.ebb61977860ab8d52e5fc92e02df64b5.js": "/Rick-and-Morty-DB/precache-manifest.ebb61977860ab8d52e5fc92e02df64b5.js",
     "service-worker.js": "/Rick-and-Morty-DB/service-worker.js",
     "static/css/main.5ecd60fb.chunk.css.map": "/Rick-and-Morty-DB/static/css/main.5ecd60fb.chunk.css.map",
-    "static/js/2.47eda909.chunk.js.LICENSE.txt": "/Rick-and-Morty-DB/static/js/2.47eda909.chunk.js.LICENSE.txt",
+    "static/js/2.5f059028.chunk.js.LICENSE.txt": "/Rick-and-Morty-DB/static/js/2.5f059028.chunk.js.LICENSE.txt",
     "static/media/logo.png": "/Rick-and-Morty-DB/static/media/logo.3de5ba72.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.3f5f35c8.js",
-    "static/js/2.47eda909.chunk.js",
+    "static/js/runtime-main.bad992e0.js",
+    "static/js/2.5f059028.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.02b15a69.chunk.js"
+    "static/js/main.f81766da.chunk.js"
   ]
 }
