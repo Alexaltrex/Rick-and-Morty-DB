@@ -2,6 +2,7 @@ import React from 'react';
 import Typography from "@material-ui/core/Typography";
 import logo from './../../../assets/logo.png'
 import {makeStyles} from "@material-ui/core/styles";
+import useCommonQueryParams from "../../../Hooks/useCommonQueryParams";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -17,6 +18,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Home: React.FC = () => {
+    useCommonQueryParams();
     const classes = useStyles();
     return (
         <div className={classes.root}>

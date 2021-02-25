@@ -84,3 +84,5 @@ export type PathParamsType = {
 }
 
 export type GetStringKeysType<T> = Extract<keyof T, string>;
+
+export type ShowCharactersFromType = 'all' | 'search' | 'episode' | 'location';

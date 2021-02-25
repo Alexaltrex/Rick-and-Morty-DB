@@ -3,8 +3,6 @@ import React from "react";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 
-
-
 const renderSelectField = ({
                                input,
                                label,
@@ -17,7 +15,6 @@ const renderSelectField = ({
         <FormControl error={touched && error}>
             <InputLabel htmlFor="color-native-simple">{label}</InputLabel>
             <Select
-
                 native
                 {...input}
                 {...custom}

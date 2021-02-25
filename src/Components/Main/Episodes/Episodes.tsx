@@ -8,13 +8,16 @@ import {makeStyles} from "@material-ui/core/styles";
 import SearchEpisodesContainer from "./SearchEpisodes/SearchEpisodesContainer";
 import {EpisodesPropsType} from "./EpisodesContainer";
 import MovieIcon from '@material-ui/icons/Movie';
+import useCommonQueryParams from "../../../Hooks/useCommonQueryParams";
 
 const Episodes: React.FC<EpisodesPropsType> = (props) => {
+    useCommonQueryParams();
     const {
         episodes, showEpisodesFrom, setShowEpisodesFrom,
         getEpisodes, searchingParams, getEpisodesFromSearch,
         isLoading, totalEpisodesCount, currentCharacter
     } = props;
+
     const [panelIsOpen, setPanelIsOpen] = useState(false);
 
     const classes = useStyles();

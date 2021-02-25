@@ -18,6 +18,10 @@ import {makeStyles} from "@material-ui/core/styles";
 import PeopleIcon from '@material-ui/icons/People';
 import {CharactersPropsType} from "./CharactersContainer";
 import Preloader from "../../Common/Preloader";
+import {NumberParam, StringParam, useQueryParam} from "use-query-params";
+import {ShowCharactersFromType} from "../../../Types/Types";
+import useCommonQueryParams from "../../../Hooks/useCommonQueryParams";
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const Characters: React.FC<CharactersPropsType> = (props) => {
     const {
@@ -25,11 +29,48 @@ const Characters: React.FC<CharactersPropsType> = (props) => {
         getCharacters, setCurrentPage, totalCharactersCount,
         getCharactersFromSearch, searchingParams, isLoading,
         lanError, setShowCharactersFrom, showCharactersFrom, currentEpisode,
-        currentLocation
+        currentLocation, setSearchingParams
     } = props;
 
+    useCommonQueryParams();
+
+    //=============================== useQueryParam ==========================
+    const [currentPageQuery, setCurrentPageQuery] = useQueryParam('page', NumberParam);
+    const [showCharactersFromQuery, setShowCharactersFromQuery] = useQueryParam('showFrom', StringParam);
+    const [nameQuery, setNameQuery] = useQueryParam('name', StringParam);
+    const [genderQuery, setGenderQuery] = useQueryParam('gender', StringParam);
+    const [statusQuery, setStatusQuery] = useQueryParam('status', StringParam);
+    const [speciesQuery, setSpeciesQuery] = useQueryParam('species', StringParam);
+    const [typeQuery, setTypeQuery] = useQueryParam('type', StringParam);
+    // URL => STATE
+    useEffect(() => {
+        setCurrentPage(currentPageQuery ? currentPageQuery : currentPage);
+        setShowCharactersFrom(showCharactersFromQuery ? showCharactersFromQuery as ShowCharactersFromType : showCharactersFrom);
+        setSearchingParams({
+            name: nameQuery ? nameQuery : searchingParams.name,
+            gender: genderQuery ? genderQuery : searchingParams.gender,
+            status: statusQuery ? statusQuery : searchingParams.status,
+            species: speciesQuery ? speciesQuery : searchingParams.species,
+            type: typeQuery ? typeQuery : searchingParams.type
+        });
+    }, []);
+    // STATE => URL
+    useEffect(() => {
+        setCurrentPageQuery(currentPage !== 1 ? currentPage : undefined);
+        setShowCharactersFromQuery(showCharactersFrom !== 'all' ? showCharactersFrom : undefined);
+        setNameQuery(searchingParams.name !== '' ? searchingParams.name : undefined);
+        setGenderQuery(searchingParams.gender !== '' ? searchingParams.gender : undefined);
+        setStatusQuery(searchingParams.status !== '' ? searchingParams.status : undefined);
+        setSpeciesQuery(searchingParams.species !== '' ? searchingParams.species : undefined);
+        setTypeQuery(searchingParams.type !== '' ? searchingParams.type : undefined);
+    }, [
+        currentPage,
+        showCharactersFrom,
+        searchingParams
+    ]);
+
     const classes = useStyles();
-    const [panelIsOpen, setPanelIsOpen] = useState(false);
+    const [panelIsOpen, setPanelIsOpen] = useState(false);// панель поиска
 
     useEffect(() => {
         if (showCharactersFrom === 'all') {
@@ -70,7 +111,6 @@ const Characters: React.FC<CharactersPropsType> = (props) => {
         setOpen(false);
     };
 
-
     return (
         <>
             <div>
@@ -103,6 +143,7 @@ const Characters: React.FC<CharactersPropsType> = (props) => {
                     {panelIsOpen ? 'Close search' : 'Open search'}
                 </Button>
                 <Button onClick={onShowAllClick}
+                        startIcon={<VisibilityIcon/>}
                         disabled={showCharactersFrom === 'all'}
                         className={classes.button}
                         variant='contained'>

@@ -1,7 +1,13 @@
 import Characters from "./Characters";
 import {connect} from "react-redux";
 import {StateType} from "../../../store/store";
-import {CharacterType, EpisodeType, LocationType, SearchingCharactersParamsType} from "../../../Types/Types";
+import {
+    CharacterType,
+    EpisodeType,
+    LocationType,
+    SearchingCharactersParamsType,
+    ShowCharactersFromType
+} from "../../../Types/Types";
 import {charactersAC, getCharacters, getCharactersFromSearch} from "../../../store/characters-reducer";
 import React from "react";
 
@@ -22,7 +28,8 @@ type MapDispatchPropsType = {
     getCharacters: (currentPage: number) => void
     setCurrentPage: (currentPage: number) => void
     getCharactersFromSearch: (searchingParams: SearchingCharactersParamsType, currentPage: number) => void
-    setShowCharactersFrom: (showCharactersFrom: 'all' | 'search' | 'episode' | 'location') => void
+    setShowCharactersFrom: (showCharactersFrom: ShowCharactersFromType) => void
+    setSearchingParams: (searchingParams: SearchingCharactersParamsType) => void
 }
 
 const mapStateToProps = (state: StateType): MapStatePropsType => ({
@@ -42,13 +49,16 @@ export type CharactersPropsType = MapStatePropsType & MapDispatchPropsType
 
 const setCurrentPage = charactersAC.setCurrentPage;
 const setShowCharactersFrom = charactersAC.setShowCharactersFrom;
-
+const setSearchingParams = charactersAC.setSearchingParams;
 
 const CharactersContainer = connect<MapStatePropsType,
     MapDispatchPropsType, {}, StateType>(mapStateToProps,
     {
-        getCharacters, setCurrentPage, getCharactersFromSearch,
-        setShowCharactersFrom
+        getCharacters,
+        setCurrentPage,
+        getCharactersFromSearch,
+        setShowCharactersFrom,
+        setSearchingParams
     })(Characters);
 
 export default CharactersContainer;

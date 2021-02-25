@@ -12,6 +12,7 @@ import {
 } from "../../../../Helpers/Validators";
 import renderSelectField from "../../../Common/renderSelectField";
 import RenderTextField from "../../../Common/RenderTextField";
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 //================================= FORM ===================================
 const SearchCharactersForm: React.FC<InjectedFormProps<SearchCharactersFormValuesType, SearchCharactersFormOwnPropsType> & SearchCharactersFormOwnPropsType> = (props) => {
@@ -53,9 +54,10 @@ const SearchCharactersForm: React.FC<InjectedFormProps<SearchCharactersFormValue
             <Button type="button"
                     variant="contained"
                     disabled={pristine || submitting}
+                    startIcon={<HighlightOffIcon/>}
                     onClick={reset}
                     className={classes.button}>
-                Clear Values
+                Reset
             </Button>
             {error && !pristine &&
             <Typography color='error' variant='h6'>

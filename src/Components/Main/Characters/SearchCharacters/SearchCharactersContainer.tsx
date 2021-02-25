@@ -13,7 +13,11 @@ const setShowCharactersFrom = charactersAC.setShowCharactersFrom;
 
 const SearchCharactersContainer = connect<MapStatePropsType,
     MapDispatchPropsType, {}, StateType>(mapStateToProps,
-    {setSearchingParams, setCurrentPage, setShowCharactersFrom})(SearchCharacters);
+    {
+        setSearchingParams,
+        setCurrentPage,
+        setShowCharactersFrom
+    })(SearchCharacters);
 
 type MapStatePropsType = {}
 

@@ -8,8 +8,10 @@ import Location from './Location/Location'
 import {LocationsPropsType} from "./LocationsContainer";
 import RoomIcon from '@material-ui/icons/Room';
 import SearchLocationsContainer from "./SearchLocations/SearchLocationsContainer";
+import useCommonQueryParams from "../../../Hooks/useCommonQueryParams";
 
 const Locations: React.FC<LocationsPropsType> = (props) => {
+    useCommonQueryParams();
     const {
         locations, getLocations, searchingParams, getLocationsFromSearch,
         showLocationsFrom, setShowLocationsFrom, totalLocationsCount,

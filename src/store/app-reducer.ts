@@ -1,7 +1,7 @@
 import {GetActionsType} from "./store";
 
 const initialState = {
-    open: false, // бокавая панель открыта
+    open: true, // бокавая панель открыта
     isLoading: false, // загрузка происходит?
     lanError: false, // ошибка сети
 };

@@ -6,6 +6,7 @@ import {StateType} from "../../../store/store";
 import {charactersAC} from "../../../store/characters-reducer";
 import {episodesAC} from "../../../store/episodes-reducer";
 import {locationsAC} from "../../../store/locations-reducer";
+import {SearchingCharactersParamsType} from "../../../Types/Types";
 
 type MapStatePropsType = {
     currentItem: number
@@ -16,6 +17,8 @@ type MapDispatchPropsType = {
     setShowCharactersFrom: (showCharactersFrom: 'all' | 'search' | 'episode' | 'location') => void
     setShowEpisodesFrom: (showEpisodesFrom: 'all' | 'search' | 'character') => void
     setShowLocationsFrom: (showLocationsFrom: 'all' | 'search') => void
+    setCurrentPage: (currentPage: number) => void
+    setSearchingParams: (searchingParams: SearchingCharactersParamsType) => void
 }
 
 export enum OwnIndexEnum {
@@ -41,11 +44,17 @@ const setCurrentSidebarMenuItem = sidebarAC.setCurrentSidebarMenuItem;
 const setShowCharactersFrom = charactersAC.setShowCharactersFrom;
 const setShowEpisodesFrom = episodesAC.setShowEpisodesFrom;
 const setShowLocationsFrom = locationsAC.setShowLocationsFrom;
+const setCurrentPage = charactersAC.setCurrentPage;
+const setSearchingParams = charactersAC.setSearchingParams;
 
 const SidebarItemContainer = connect<MapStatePropsType, MapDispatchPropsType, OwnPropsType, StateType>
 (mapStateToProps, {
-    setCurrentSidebarMenuItem, setShowCharactersFrom,
-    setShowEpisodesFrom, setShowLocationsFrom
+    setCurrentSidebarMenuItem,
+    setShowCharactersFrom,
+    setShowEpisodesFrom,
+    setShowLocationsFrom,
+    setCurrentPage,
+    setSearchingParams
 })(SidebarItem);
 
 export default SidebarItemContainer;

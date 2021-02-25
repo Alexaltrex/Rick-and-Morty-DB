@@ -9,20 +9,25 @@ import clsx from "clsx";
 import indigo from "@material-ui/core/colors/indigo";
 
 const SidebarItem: React.FC<SidebarItemPropsType> = (props) => {
-    const {to, primary, icon, currentItem, ownIndex, setCurrentSidebarMenuItem,
-        setShowCharactersFrom, setShowEpisodesFrom, setShowLocationsFrom} = props;
+    const {
+        to, primary, icon, currentItem, ownIndex, setCurrentSidebarMenuItem,
+        setShowCharactersFrom, setShowEpisodesFrom, setShowLocationsFrom,
+        setCurrentPage, setSearchingParams
+    } = props;
     const classes = useStyles();
     const onClick = () => {
         setCurrentSidebarMenuItem(ownIndex);
-        if (ownIndex === OwnIndexEnum.characters) {
+        setCurrentPage(1); // сброс номера страницы characters
+        setSearchingParams({name: '', gender: '', species: '', status: '', type: ''});
+        //if (ownIndex === OwnIndexEnum.characters) {
             setShowCharactersFrom('all')
-        }
-        if (ownIndex === OwnIndexEnum.locations) {
+        //}
+        //if (ownIndex === OwnIndexEnum.locations) {
             setShowLocationsFrom('all')
-        }
-        if (ownIndex === OwnIndexEnum.episodes) {
+        //}
+        //if (ownIndex === OwnIndexEnum.episodes) {
             setShowEpisodesFrom('all')
-        }
+        //}
     };
 
     return (

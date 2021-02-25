@@ -1,4 +1,10 @@
-import {CharactersDataType, CharacterType, EpisodeType, SearchingCharactersParamsType} from "../Types/Types";
+import {
+    CharactersDataType,
+    CharacterType,
+    EpisodeType,
+    SearchingCharactersParamsType,
+    ShowCharactersFromType
+} from "../Types/Types";
 import {GetActionsType, StateType} from "./store";
 import {ThunkAction} from "redux-thunk";
 import {charactersAPI, episodesAPI} from "../DAL/api";
@@ -12,7 +18,7 @@ const initialState = {
     currentCharacter: null as CharacterType | null | undefined,
     next: null as string | null,
     prev: null as string | null,
-    showCharactersFrom: 'all' as 'all' | 'search' | 'episode' | 'location',
+    showCharactersFrom: 'all' as ShowCharactersFromType,
     searchingParams: {
         name: '', gender: '', status: '', species: '', type: ''
     },
@@ -80,7 +86,7 @@ export const charactersAC = {
         prevId,
         nextId
     } as const),
-    setShowCharactersFrom: (showCharactersFrom: 'all' | 'search' | 'episode' | 'location') => ({
+    setShowCharactersFrom: (showCharactersFrom: ShowCharactersFromType) => ({
         type: 'CHARACTERS/SET_SHOW_CHARACTERS_FROM', showCharactersFrom
     } as const)
 };
@@ -107,7 +113,7 @@ export const getCurrentCharacter = (id: number): ThunkType => async (dispatch) =
         dispatch(charactersAC.setCurrentCharacter(getCurrentCharacterResponse));
         // получение информации о эпизодах, относящихся к текущему характеру:
         // в currentCharacter содержится только массив ссылок на эпизоды
-        const arrayOfRequests = getCurrentCharacterResponse.episode.map(episodeUrl => episodesAPI.getEpisodesByUrl(episodeUrl))
+        const arrayOfRequests = getCurrentCharacterResponse.episode.map(episodeUrl => episodesAPI.getEpisodesByUrl(episodeUrl));
         let results = await Promise.all(arrayOfRequests);
         dispatch(charactersAC.setEpisodesOfCurrentCharacter(results));
     } catch (e) {
